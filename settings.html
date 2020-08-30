@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chuvas Jampa</title>
+    <link rel="shortcut icon" type="image/png" href="images/Chuvas Jampa.png"/>
+</head>
+
+<style>
+    @font-face {
+        font-family: MavenPro;
+        src: url(fonts/MavenPro.ttf);
+    }
+
+    * {
+        box-sizing: border-box;
+        font-family: MavenPro;
+    }
+
+    body {
+        max-width: 500px;
+        height: 100vh;
+        margin: auto;
+        display: flex;
+        flex-direction: column;
+    }
+
+    #ctrSalvar {
+        width: 100%;
+        background-color: #ddd;
+        display: block;
+        margin: 40px 0;
+        position: relative;
+        font-size: 1.5em;
+        font-weight: 600;
+        line-height: 36px;
+        border: 0;
+        padding: 12px 30px;
+        text-align: left;
+    }
+
+    /* Tirado de https://codepen.io/BuddyLReno/pen/boGRPO */
+    .inputGroup {
+        background-color: #ddd;
+        display: block;
+        margin: 10px 0;
+        position: relative;
+        font-size: 18px;
+        font-weight: 600;
+        line-height: 36px;
+    }
+    .inputGroup label {
+        padding: 12px 30px;
+        width: 100%;
+        display: block;
+        text-align: left;
+        color: #3C454C;
+        cursor: pointer;
+        position: relative;
+        z-index: 2;
+        transition: color 200ms ease-in;
+        overflow: hidden;
+    }
+    .inputGroup label:before {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        content: '';
+        background-color: #5562eb;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%) scale3d(1, 1, 1);
+        transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
+        opacity: 0;
+        z-index: -1;
+    }
+    .inputGroup input:checked ~ label {
+        color: #fff;
+    }
+    .inputGroup input:checked ~ label:before {
+        transform: translate(-50%, -50%) scale3d(56, 56, 1);
+        opacity: 1;
+    }
+    .inputGroup input {
+        width: 32px;
+        height: 32px;
+        order: 1;
+        z-index: 2;
+        position: absolute;
+        right: 30px;
+        top: 50%;
+        transform: translateY(-50%);
+        cursor: pointer;
+        visibility: hidden;
+    }
+</style>
+
+<body>
+    <form action="." method="GET">
+        <h1>Configurações</h1>
+        <h2>Escala de tempo</h2>
+        <div class="inputGroup">
+            <input id="ctrTempo1" name="tempo" type="radio" value="1" />
+            <label for="ctrTempo1">Última hora</label>
+        </div>
+        <div class="inputGroup">
+            <input id="ctrTempo3" name="tempo" type="radio" value="3" />
+            <label for="ctrTempo3">Últimas 3 horas</label>
+        </div>
+        <div class="inputGroup">
+            <input id="ctrTempo12" name="tempo" type="radio" value="12" />
+            <label for="ctrTempo12">Últimas 12 horas</label>
+        </div>
+        <div class="inputGroup">
+            <input id="ctrTempo24" name="tempo" type="radio" value="24" />
+            <label for="ctrTempo24">Últimas 24 horas</label>
+        </div>
+        <h2>Paleta de cores</h2>
+        <div class="inputGroup">
+            <input id="ctrCorSuave" name="cor" type="radio" value="0" />
+            <label for="ctrCorSuave">Suave</label>
+        </div>
+        <div class="inputGroup">
+            <input id="ctrCorAgressiva" name="cor" type="radio" value="1" />
+            <label for="ctrCorAgressiva">Agressiva</label>
+        </div>
+        <input id="ctrSalvar" type="submit" value="Salvar alterações">
+    </form>
+    <script src="code/pagConfigs.ts"></script>
+</body>
+
+</html>

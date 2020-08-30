@@ -1,0 +1,78 @@
+@font-face {
+    font-family: MavenPro;
+    src: url(../fonts/MavenPro.ttf);
+}
+
+* {
+    box-sizing: border-box;
+    font-family: MavenPro;
+}
+
+html, body {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+@media all and (orientation: portrait) {
+    html, body { flex-direction: column; }
+
+    #painel {
+        flex: 1;
+        order: 1;
+    }
+
+    #corpo {
+        flex: 0 0 60vh;
+        order: 0;
+    }
+}
+
+@media all and (orientation: landscape) {
+    html, body { flex-direction: row; }
+
+    #painel {
+        flex: 0 0 200px;
+        order: 0;
+    }
+
+    #corpo {
+        flex: 1;
+        order: 1;
+    }
+}
+
+#painel {
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    text-align: center;
+}
+
+#painel > hr { width: 100%; }
+
+#painel > select {
+    margin: 0.25rem;
+    padding: 0.25rem;
+    font-size: 1rem;
+    min-height: 2rem;
+}
+
+#painel > a { 
+    background-color: white; /* Green */
+    border: none;
+    padding: 8px;
+    text-align: center;
+    text-decoration: none;
+    color: black;
+    font-size: 16px;
+    transition-duration: 0.5s;
+    border: 2px solid #e7e7e7;
+    margin-bottom: 8px;
+}
+
+#painel > a:hover { background-color: #e7e7e7; }
+
+#legenda>div { line-height: 2em; }
