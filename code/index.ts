@@ -53,9 +53,8 @@ if (params.has('tempo') && params.has('cor')) {
     }
     const corpo = await resp.json();
     const registros =  corpo as IRespostaRegistros;
-    const estacoes = registros.estacoes.map(x => new EstacaoEssencial(x));
 
-    contexto.estacoes = estacoes
+    contexto.estacoes = registros.estacoes
     contexto.ultimaAtualizacao = registros.data
 
     const dadosGeograficos = new DadosGeograficos(0.2);

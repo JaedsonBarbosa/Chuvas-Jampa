@@ -1,4 +1,4 @@
-import { EstacaoEssencial } from "./estacao"
+import { IEstacaoDetalhada, GetMedicao } from "./estacao"
 import { GerenciadorCores } from "./cores"
 
 export class ContextoGeral
@@ -10,7 +10,7 @@ export class ContextoGeral
         sessionStorage.setItem('imagemChuvas', value)
     }
 
-    private _estacoes: EstacaoEssencial[]
+    private _estacoes: IEstacaoDetalhada[]
     get estacoes() { return this._estacoes }
     set estacoes(value) {
         this._estacoes = value
@@ -55,7 +55,7 @@ export class ContextoGeral
             function radians(graus: number): number { return graus * (Math.PI / 180); }
             return 6372.8 * 2 * Math.asin(Math.sqrt(Math.sin(radians(lat - lat1) / 2) ** 2 + Math.cos(radians(lat1)) * Math.cos(radians(lat)) * Math.sin(radians(lon - lon1) / 2) ** 2));
         }
-        const pesos = this._estacoes.map(atual => 1 / Haversine(atual.latitude, atual.longitude) ** 2);
-        return this._estacoes.reduce<number>((anterior, atual, i) => atual.GetMedicao(this._escalaTempo) * pesos[i] + anterior, 0) / pesos.reduce<number>((anterior, atual) => atual + anterior, 0);
+        const pesos = this._estacoes.map(atual => 1 / Haversine(atual._latitude, atual._longitude) ** 2);
+        return this._estacoes.reduce<number>((anterior, atual, i) => GetMedicao(atual, this._escalaTempo) * pesos[i] + anterior, 0) / pesos.reduce<number>((anterior, atual) => atual + anterior, 0);
     }
 }

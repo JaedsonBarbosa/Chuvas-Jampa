@@ -48,3 +48,14 @@ export interface IEstacaoDetalhada {
     _longitude: number;
     siglaRede: string;
 }
+
+export function GetMedicao(estacao: IEstacaoDetalhada, horas: number): number {
+    function ProcessarMedicao(valor: string) { return valor == '-' ? 0 : Number(valor); }
+    switch (horas) {
+        case 1: return ProcessarMedicao(estacao.acc1hr);
+        case 3: return ProcessarMedicao(estacao.acc3hr);
+        case 12: return ProcessarMedicao(estacao.acc12hr);
+        case 24: return ProcessarMedicao(estacao.acc24hr);
+        default: throw new Error("Quantidade de horas inesperada");
+    }
+}

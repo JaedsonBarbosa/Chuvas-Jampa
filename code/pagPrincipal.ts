@@ -1,5 +1,6 @@
 import { DadosGeograficos } from "./geografia"
 import { ContextoGeral } from "./contextoGeral";
+import { GetMedicao } from "./estacao"
 
 declare let L;
 
@@ -13,7 +14,7 @@ const mapa = L.map('corpo', {
     minZoom: 13,
     maxZoom: 18,
     maxBounds: mapaUtil,
-    maxBoundsViscosity: 0.5,
+    maxBoundsViscosity: 1,
     zoomControl: false
 });
 mapa.on('locationfound', x => {
@@ -61,19 +62,18 @@ const imagem = contexto.imagemChuvas;
 L.imageOverlay(imagem, mapaUtil).addTo(mapa);
 
 // Atualizar marcadores
-// const marcadores = L.layerGroup().addTo(mapa);
-// controleLayers.addOverlay(marcadores, "Pluviômetros");
-// const marksAdicionados = marcadores.getLayers();
-// for (const pluv of contexto.estacoes.filter(v => v.isJampa)) {
-//     const atual = marksAdicionados.find(mark => {
-//         const local = mark.getLatLng();
-//         return local.lat === pluv.latitude && local.lng === pluv.longitude;
-//     });
-//     if (atual === undefined) {
-//         const caixa = L.popup().setContent(pluv.GetInfoCompleta(contexto.escalaTempo))
-//         marcadores.addLayer(L.marker([pluv.latitude, pluv.longitude]).bindPopup(caixa));
-//     } else atual.setPopupContent(pluv.GetInfoCompleta(contexto.escalaTempo));
-// }
+const marcadores = L.layerGroup().addTo(mapa);
+controleLayers.addOverlay(marcadores, "Pluviômetros");
+for (const pluv of contexto.estacoes.filter(v => v.codibge === 2507507)) {
+    const infoCompleta = `
+    <h2>${pluv.nomeestacao}</h1>
+    Fonte: <span>${pluv.siglaRede}</span><br>
+    ${pluv.ultimovalor === undefined ? '' : `Última medição:<br>${pluv.ultimovalor?.toFixed(2)} mm (${pluv.datahoraUltimovalor ?? 'Desconhecido'})<br>`}
+    Precipitação acumulada:<br>${GetMedicao(pluv, contexto.escalaTempo).toFixed(2)} mm (${contexto.escalaTempo === 1 ? 'Última hora' : `Últimas ${contexto.escalaTempo} horas`})
+    <br><a href="detalhes">Ver informações detalhadas</a>`; //target="_blank"
+    const caixa = L.popup().setContent(infoCompleta)
+    marcadores.addLayer(L.marker([pluv._latitude, pluv._longitude]).bindPopup(caixa));
+}
 
 // Atualizar barra de cores
 const nivelMinimo = contexto.cores.valorMinimo;
