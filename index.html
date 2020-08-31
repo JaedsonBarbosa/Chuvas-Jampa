@@ -4,21 +4,63 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Salvando</title>
+    <title>Chuvas Jampa</title>
     <link rel="shortcut icon" type="image/png" href="images/Chuvas Jampa.png"/>
 </head>
 
 <style>
-    #ctrDefault {
-        visibility:collapse;
+    @font-face {
+        font-family: MavenPro;
+        src: url(fonts/MavenPro.ttf);
+    }
+
+    * {
+        box-sizing: border-box;
+        font-family: MavenPro;
+    }
+
+    body {
+        max-width: 500px;
+        height: 100vh;
+        margin: auto;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    h1 {
+        margin: 0;
+        text-align: center;
+    }
+
+    /* Tirado de https://codepen.io/BuddyLReno/pen/boGRPO */
+    .inputGroup {
+        /* background-color: #ddd; */
+        background-color: #5562eb;
+        display: block;
+        margin: 10px 0;
+        position: relative;
+        font-size: 18px;
+        font-weight: 600;
+        line-height: 36px;
+        padding: 12px 30px;
+        text-align: left;
+        /* color: #3C454C; */
+        color: #fff;
+        overflow: hidden;
+        text-decoration-line: initial;
     }
 </style>
 
 <body>
-    <div id="ctrDefault">
-        <a href="main.html">Mapa</a>
-    </div>
+    <script src="code/app.ts"></script>
+    <lottie-player id="ctrAnimacao" src="https://assets3.lottiefiles.com/packages/lf20_x9pEKm.json" loop background="transparent" speed="1" style="width: 200px; height: 200px; align-self: center;"></lottie-player>
+    <h1>CHUVAS JAMPA</h1>
     <script src="code/index.ts"></script>
+    <div id="ctrSucesso" style="visibility: hidden;">
+        <a href="main.html" class="inputGroup">Ver mapa</a>
+        <a href="about.html" class="inputGroup">Sobre o projeto</a>
+    </div>
 </body>
 
 </html>
