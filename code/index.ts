@@ -1,6 +1,6 @@
 import { ContextoGeral } from "./contextoGeral"
 import { IEstacaoDetalhada, EstacaoEssencial } from "./estacao"
-import { NiveisPerigo } from "./niveis";
+import { GerenciadorCores } from "./cores";
 import { DadosGeograficos } from "./geografia"
 
 const params = new URLSearchParams(location.search)
@@ -69,11 +69,32 @@ if (params.has('tempo') && params.has('cor')) {
         for (let lon = dadosGeograficos.lonMin; lon <= dadosGeograficos.lonMax; lon += dadosGeograficos.passo)
             pontos.push([lat, lon]);
     const precipitacoes = pontos.map(v => contexto.CalcularChuva(v[0], v[1]));
-    const niveis = new NiveisPerigo(precipitacoes, cor);
-    precipitacoes.forEach((ponto, iPonto) => niveis.GetCor(ponto).forEach((cor, iCor) => imageData.data[iPonto * 4 + iCor] = cor));
+    const niveis = new GerenciadorCores(precipitacoes, cor);
+    const quantNiveis = niveis.cores.length
+    const passo = (niveis.valorMaximo - niveis.valorMinimo) / (quantNiveis - 1)
+    precipitacoes.forEach((ponto, iPonto) => {
+        let corPonto: number[]
+        for (let i = 0, nivel = niveis.valorMinimo; i < quantNiveis; i++, nivel += passo) {
+            if (nivel >= ponto) {
+                if (i === 0) {
+                    corPonto = niveis.cores[0]
+                    break
+                }
+                const corMinima = niveis.cores[i - 1], corMaxima = niveis.cores[i];
+                const minimo = nivel - passo, maximo = nivel;
+                const relacao = (ponto - minimo) / (maximo - minimo)
+                corPonto = corMinima.map((v, i) => v + relacao * (corMaxima[i] - v));
+                break
+            } else if (i == quantNiveis - 1) {
+                corPonto = niveis.cores[quantNiveis - 1]
+                break
+            }
+        }
+        corPonto.forEach((cor, iCor) => imageData.data[iPonto * 4 + iCor] = cor)
+    });
     canvasContext.putImageData(imageData, 0, 0);
     contexto.imagemChuvas = canvas.toDataURL("image/png");
-    contexto.niveis = niveis
+    contexto.cores = niveis
 
     // Um leve delay pra quando a operação for muito rápida
     setTimeout(() => concluido = true, 1000);

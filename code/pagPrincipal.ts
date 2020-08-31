@@ -76,12 +76,13 @@ L.imageOverlay(imagem, mapaUtil).addTo(mapa);
 // }
 
 // Atualizar barra de cores
-const nivelMinimo = contexto.niveis.niveisMarcados[0].nivelMinimo;
-const nivelMaximo = contexto.niveis.niveisMarcados[contexto.niveis.niveisMarcados.length - 1].nivelMinimo;
-function GetNivel(v:number) : string {
-    const posicao = (v - nivelMinimo) * 100 / (nivelMaximo - nivelMinimo);
-    const classe = posicao > 75 ? "info nivel invertido" : "info nivel normal"
-    return `<div class="${classe}" style="left: ${posicao}%">${v.toFixed(1)}<br>mm</div>`;
+const nivelMinimo = contexto.cores.valorMinimo;
+const nivelMaximo = contexto.cores.valorMaximo;
+function GetNivel(index:number) : string {
+    const posicao = index / (contexto.cores.cores.length - 1)
+    const classe = posicao > 0.75 ? "info nivel invertido" : "info nivel normal"
+    const nivel = nivelMinimo + posicao * (nivelMaximo - nivelMinimo)
+    return `<div class="${classe}" style="left: ${100 * posicao}%">${nivel.toFixed(1)}<br>mm</div>`
 }
 function GetCor(cor:number[]) : string {
     return `rgb(${cor[0]},${cor[1]},${cor[2]})`;
@@ -90,9 +91,10 @@ const barra = L.control({ position: 'topright' });
 barra.onAdd = function () {
     const container = document.createElement("div");
     container.className = 'info container';
+    const cores = contexto.cores.cores
     container.innerHTML =
-    `<div class="info barra" style="background-image: linear-gradient(to right, ${contexto.niveis.niveisMarcados.map(v => GetCor(v.cor)).join(',')})"></div>
-    ${contexto.niveis.niveisMarcados.filter(v => v.nivelMinimo <= nivelMaximo).map(v => GetNivel(v.nivelMinimo)).join('\n')}`;
+    `<div class="info barra" style="background-image: linear-gradient(to right, ${cores.map(v => GetCor(v)).join(',')})"></div>
+    ${Array.from({length: cores.length}).map((v,i) => GetNivel(i)).join('\n')}`;
     return container;
 };
 barra.addTo(mapa);

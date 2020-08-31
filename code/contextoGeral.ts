@@ -1,5 +1,5 @@
 import { EstacaoEssencial } from "./estacao"
-import { NiveisPerigo } from "./niveis"
+import { GerenciadorCores } from "./cores"
 
 export class ContextoGeral
 {
@@ -24,11 +24,11 @@ export class ContextoGeral
         sessionStorage.setItem('ultimaAtualizacao', value.toString())
     }
 
-    private _niveis: NiveisPerigo
-    get niveis() { return this._niveis }
-    set niveis(value) {
-        this._niveis = value
-        sessionStorage.setItem('niveis', JSON.stringify(value))
+    private _cores: GerenciadorCores
+    get cores() { return this._cores }
+    set cores(value) {
+        this._cores = value
+        sessionStorage.setItem('cores', JSON.stringify(value))
     }
 
     private _escalaTempo: number
@@ -42,7 +42,7 @@ export class ContextoGeral
             this._imagemChuvas = sessionStorage.getItem('imagemChuvas')
             this._estacoes = JSON.parse(sessionStorage.getItem('estacoes'))
             this._ultimaAtualizacao = Number(sessionStorage.getItem('ultimaAtualizacao'))
-            this._niveis = JSON.parse(sessionStorage.getItem('niveis'))
+            this._cores = JSON.parse(sessionStorage.getItem('cores'))
         }
 
         const _escalaTempo = Number(localStorage.getItem('escalaTempo') ?? 1)
