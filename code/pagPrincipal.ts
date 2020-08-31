@@ -61,23 +61,23 @@ const imagem = contexto.imagemChuvas;
 L.imageOverlay(imagem, mapaUtil).addTo(mapa);
 
 // Atualizar marcadores
-const marcadores = L.layerGroup().addTo(mapa);
-controleLayers.addOverlay(marcadores, "Pluviômetros");
-const marksAdicionados = marcadores.getLayers();
-for (const pluv of contexto.estacoes.filter(v => v.isJampa)) {
-    const atual = marksAdicionados.find(mark => {
-        const local = mark.getLatLng();
-        return local.lat === pluv.latitude && local.lng === pluv.longitude;
-    });
-    if (atual === undefined) {
-        const caixa = L.popup().setContent(pluv.GetInfoCompleta(contexto.escalaTempo))
-        marcadores.addLayer(L.marker([pluv.latitude, pluv.longitude]).bindPopup(caixa));
-    } else atual.setPopupContent(pluv.GetInfoCompleta(contexto.escalaTempo));
-}
+// const marcadores = L.layerGroup().addTo(mapa);
+// controleLayers.addOverlay(marcadores, "Pluviômetros");
+// const marksAdicionados = marcadores.getLayers();
+// for (const pluv of contexto.estacoes.filter(v => v.isJampa)) {
+//     const atual = marksAdicionados.find(mark => {
+//         const local = mark.getLatLng();
+//         return local.lat === pluv.latitude && local.lng === pluv.longitude;
+//     });
+//     if (atual === undefined) {
+//         const caixa = L.popup().setContent(pluv.GetInfoCompleta(contexto.escalaTempo))
+//         marcadores.addLayer(L.marker([pluv.latitude, pluv.longitude]).bindPopup(caixa));
+//     } else atual.setPopupContent(pluv.GetInfoCompleta(contexto.escalaTempo));
+// }
 
 // Atualizar barra de cores
-const nivelMinimo = contexto.niveis.niveisSuavizados[0].nivelMinimo;
-const nivelMaximo = contexto.niveis.niveisSuavizados[contexto.niveis.niveisSuavizados.length - 1].nivelMinimo;
+const nivelMinimo = contexto.niveis.niveisMarcados[0].nivelMinimo;
+const nivelMaximo = contexto.niveis.niveisMarcados[contexto.niveis.niveisMarcados.length - 1].nivelMinimo;
 function GetNivel(v:number) : string {
     const posicao = (v - nivelMinimo) * 100 / (nivelMaximo - nivelMinimo);
     const classe = posicao > 75 ? "info nivel invertido" : "info nivel normal"
@@ -91,7 +91,7 @@ barra.onAdd = function () {
     const container = document.createElement("div");
     container.className = 'info container';
     container.innerHTML =
-    `<div class="info barra" style="background-image: linear-gradient(to right, ${contexto.niveis.niveisSuavizados.map(v => GetCor(v.cor)).join(',')})"></div>
+    `<div class="info barra" style="background-image: linear-gradient(to right, ${contexto.niveis.niveisMarcados.map(v => GetCor(v.cor)).join(',')})"></div>
     ${contexto.niveis.niveisMarcados.filter(v => v.nivelMinimo <= nivelMaximo).map(v => GetNivel(v.nivelMinimo)).join('\n')}`;
     return container;
 };

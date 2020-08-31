@@ -69,7 +69,7 @@ if (params.has('tempo') && params.has('cor')) {
         for (let lon = dadosGeograficos.lonMin; lon <= dadosGeograficos.lonMax; lon += dadosGeograficos.passo)
             pontos.push([lat, lon]);
     const precipitacoes = pontos.map(v => contexto.CalcularChuva(v[0], v[1]));
-    const niveis = NiveisPerigo.GerarNiveis(precipitacoes, cor);
+    const niveis = new NiveisPerigo(precipitacoes, cor);
     precipitacoes.forEach((ponto, iPonto) => niveis.GetCor(ponto).forEach((cor, iCor) => imageData.data[iPonto * 4 + iCor] = cor));
     canvasContext.putImageData(imageData, 0, 0);
     contexto.imagemChuvas = canvas.toDataURL("image/png");
