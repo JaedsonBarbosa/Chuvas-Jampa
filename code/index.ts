@@ -54,9 +54,12 @@ if (params.has('tempo') && params.has('cor')) {
     const corpo = await resp.json();
     const registros =  corpo as IRespostaRegistros;
 
-    contexto.estacoes = registros.estacoes
     contexto.ultimaAtualizacao = registros.data
+    const ultAtt = document.getElementById('ultimaAtualizacao');
+    ultAtt.style.visibility = 'visible'
+    ultAtt.innerHTML = `Dados de: ${new Date(contexto.ultimaAtualizacao).toLocaleString()}`;
 
+    contexto.estacoes = registros.estacoes
     const dadosGeograficos = new DadosGeograficos(0.2);
     const canvas = document.createElement("canvas");
     canvas.width = dadosGeograficos.largura;
@@ -96,7 +99,7 @@ if (params.has('tempo') && params.has('cor')) {
     contexto.cores = niveis
 
     // Um leve delay pra quando a operação for muito rápida
-    setTimeout(() => concluido = true, 1000);
+    setTimeout(() => concluido = true, 2000);
 })()
 
 interface IRespostaRegistros {
