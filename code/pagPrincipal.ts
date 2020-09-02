@@ -86,7 +86,7 @@ if (contexto.pronto) {
     ctrConfig.onAdd = function () {
         const container = document.createElement("div");
         container.title = 'Configurações'
-        container.onclick = (ev) => location.href = './settings.html'
+        container.onclick = (ev) => location.href = 'mapSettings.html'
         container.className = 'leaflet-control-layers leaflet-control icon';
         container.innerHTML = '\uE713';
         return container;
