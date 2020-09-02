@@ -6,26 +6,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chuvas Jampa</title>
     <link rel="shortcut icon" type="image/png" href="images/Chuvas Jampa.png"/>
+    <link rel="stylesheet" href="style/geral.css" />
 </head>
 
 <style>
-    @font-face {
-        font-family: MavenPro;
-        src: url(fonts/MavenPro.ttf);
-    }
-
-    * {
-        box-sizing: border-box;
-        font-family: MavenPro;
-    }
-
     body {
         max-width: 500px;
-        height: 100vh;
         margin: auto;
+        padding: 0 16px;
         display: flex;
         flex-direction: column;
         justify-content: center;
+        text-align: center;
     }
 
     h1 {
@@ -33,35 +25,29 @@
         text-align: center;
     }
 
-    /* Tirado de https://codepen.io/BuddyLReno/pen/boGRPO */
-    .inputGroup {
-        /* background-color: #ddd; */
+    .botao {
         background-color: #5562eb;
         display: block;
         margin: 10px 0;
-        position: relative;
-        font-size: 18px;
-        font-weight: 600;
-        line-height: 36px;
-        padding: 12px 30px;
+        font-size: 1.17rem;
+        font-weight: bold;
+        padding: 1rem 1.5rem;
         text-align: left;
-        /* color: #3C454C; */
         color: #fff;
-        overflow: hidden;
         text-decoration-line: initial;
     }
 </style>
 
 <body>
-    <script src="code/app.ts"></script>
+    <script src="code/loadLottie.ts"></script>
     <lottie-player id="ctrAnimacao" src="https://assets3.lottiefiles.com/packages/lf20_x9pEKm.json" loop background="transparent" speed="1" style="width: 200px; height: 200px; align-self: center;"></lottie-player>
     <h1>CHUVAS JAMPA</h1>
     <div id="ctrSucesso" style="visibility: hidden;">
-        <a href="main.html" class="inputGroup">Ver mapa</a>
-        <a href="settings.html" class="inputGroup">Configurações</a>
-        <a href="teste.html" class="inputGroup">Sobre o projeto</a>
+        <a href="main.html" class="botao">Ver mapa</a>
+        <a href="settings.html" class="botao">Configurações</a>
+        <a href="about.html" class="botao">Sobre o projeto</a>
     </div>
-    <span style="visibility:collapse;" id="ultimaAtualizacao"></span>
+    <span style="visibility:hidden;" id="ultimaAtualizacao"></span>
     <script src="code/index.ts"></script>
 </body>
 

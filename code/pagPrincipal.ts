@@ -23,14 +23,17 @@ mapa.on('locationfound', x => {
 })
 mapa.locate({ watch: true })
 
-// let lastPopup
-// mapa.on('click', e =>
-//     lastPopup = L.popup()
-//         .setLatLng(e.latlng)
-//         .setContent(`Precipitação estimada:<br>${contexto.CalcularChuva(e.latlng.lat, e.latlng.lng).toFixed(2) ?? 'Sem dados'} mm`)
-//         .openOn(mapa)
-// );
-// mapa.on('mouseout', () => lastPopup?.remove());
+let lastPopup
+mapa.on('click', e => 
+{
+    if (e.originalEvent.srcElement.classList.contains('icon')) return
+    lastPopup = L.popup()
+        .setLatLng(e.latlng)
+        .setContent(`Precipitação estimada:<br>${contexto.CalcularChuva(e.latlng.lat, e.latlng.lng).toFixed(2) ?? 'Sem dados'} mm`)
+        .openOn(mapa)
+}
+);
+mapa.on('mouseout', () => lastPopup?.remove());
 
 const atribuicao = 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 
@@ -40,7 +43,8 @@ const fonteDetalhada = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/te
     subdomains: 'abcd',
     minZoom: 0,
     maxZoom: 18,
-    ext: 'png'
+    ext: 'png',
+    detectRetina: true
 })
 fonteDetalhada.addTo(mapa)
 

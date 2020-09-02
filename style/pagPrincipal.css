@@ -12,9 +12,6 @@
     cursor: pointer;
 }
 
-#headerLegenda { display: none; }
-.leaflet-top.leaflet-left { z-index: 1001; }
-
 .info.container {
     position: relative;
     width: calc(100vw - 66px);

@@ -1,5 +1,5 @@
 import { ContextoGeral } from "./contextoGeral"
-import { IEstacaoDetalhada, EstacaoEssencial } from "./estacao"
+import { IEstacaoDetalhada, GetMedicao } from "./estacao"
 import { GerenciadorCores } from "./cores";
 import { DadosGeograficos } from "./geografia"
 
@@ -57,7 +57,7 @@ if (params.has('tempo') && params.has('cor')) {
     contexto.ultimaAtualizacao = registros.data
     const ultAtt = document.getElementById('ultimaAtualizacao');
     ultAtt.style.visibility = 'visible'
-    ultAtt.innerHTML = `Dados de: ${new Date(contexto.ultimaAtualizacao).toLocaleString()}`;
+    ultAtt.innerHTML = new Date(contexto.ultimaAtualizacao).toLocaleString()
 
     contexto.estacoes = registros.estacoes
     const dadosGeograficos = new DadosGeograficos(0.2);
@@ -66,34 +66,33 @@ if (params.has('tempo') && params.has('cor')) {
     canvas.height = dadosGeograficos.altura;
     const canvasContext = canvas.getContext("2d");
     const imageData = canvasContext.createImageData(dadosGeograficos.largura, dadosGeograficos.altura);
-    const pontos: number[][] = [];
-    for (let lat = dadosGeograficos.latMax; lat >= dadosGeograficos.latMin; lat -= dadosGeograficos.passo)
-        for (let lon = dadosGeograficos.lonMin; lon <= dadosGeograficos.lonMax; lon += dadosGeograficos.passo)
-            pontos.push([lat, lon]);
-    const precipitacoes = pontos.map(v => contexto.CalcularChuva(v[0], v[1]));
-    const niveis = new GerenciadorCores(precipitacoes, cor);
+    const niveis = new GerenciadorCores(registros.estacoes.map(v => GetMedicao(v, contexto.escalaTempo)), cor);
     const quantNiveis = niveis.cores.length
     const passo = (niveis.valorMaximo - niveis.valorMinimo) / (quantNiveis - 1)
-    precipitacoes.forEach((ponto, iPonto) => {
-        let corPonto: number[]
-        for (let i = 0, nivel = niveis.valorMinimo; i < quantNiveis; i++, nivel += passo) {
-            if (nivel >= ponto) {
-                if (i === 0) {
-                    corPonto = niveis.cores[0]
+    let iPonto = 0
+    for (let lat = dadosGeograficos.latMax; lat >= dadosGeograficos.latMin; lat -= dadosGeograficos.passo)
+        for (let lon = dadosGeograficos.lonMin; lon <= dadosGeograficos.lonMax; lon += dadosGeograficos.passo) {
+            const precipitacao = contexto.CalcularChuva(lat, lon);
+            let corPonto: number[]
+            for (let i = 0, nivel = niveis.valorMinimo; i < quantNiveis; i++, nivel += passo) {
+                if (nivel >= precipitacao) {
+                    if (i === 0) {
+                        corPonto = niveis.cores[0]
+                        break
+                    }
+                    const corMinima = niveis.cores[i - 1], corMaxima = niveis.cores[i];
+                    const minimo = nivel - passo, maximo = nivel;
+                    const relacao = (precipitacao - minimo) / (maximo - minimo)
+                    corPonto = corMinima.map((v, i) => v + relacao * (corMaxima[i] - v));
+                    break
+                } else if (i == quantNiveis - 1) {
+                    corPonto = niveis.cores[quantNiveis - 1]
                     break
                 }
-                const corMinima = niveis.cores[i - 1], corMaxima = niveis.cores[i];
-                const minimo = nivel - passo, maximo = nivel;
-                const relacao = (ponto - minimo) / (maximo - minimo)
-                corPonto = corMinima.map((v, i) => v + relacao * (corMaxima[i] - v));
-                break
-            } else if (i == quantNiveis - 1) {
-                corPonto = niveis.cores[quantNiveis - 1]
-                break
             }
+            corPonto.forEach((cor, iCor) => imageData.data[iPonto * 4 + iCor] = cor)
+            iPonto += 1
         }
-        corPonto.forEach((cor, iCor) => imageData.data[iPonto * 4 + iCor] = cor)
-    });
     canvasContext.putImageData(imageData, 0, 0);
     contexto.imagemChuvas = canvas.toDataURL("image/png");
     contexto.cores = niveis
