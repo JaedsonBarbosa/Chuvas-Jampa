@@ -3,6 +3,13 @@ import { GerenciadorCores } from "./cores"
 
 export class ContextoGeral
 {
+    private _pronto: boolean
+    get pronto() { return this._pronto }
+    set pronto(value) {
+        this._pronto = value
+        sessionStorage.setItem('pronto', value ? ' ' : '')
+    }
+
     private _imagemChuvas: string
     get imagemChuvas() { return this._imagemChuvas }
     set imagemChuvas(value) {
@@ -39,6 +46,7 @@ export class ContextoGeral
 
     constructor(carregarPropsMain: boolean = true) {
         if (carregarPropsMain) {
+            this._pronto = !!sessionStorage.getItem('pronto')
             this._imagemChuvas = sessionStorage.getItem('imagemChuvas')
             this._estacoes = JSON.parse(sessionStorage.getItem('estacoes'))
             this._ultimaAtualizacao = Number(sessionStorage.getItem('ultimaAtualizacao'))

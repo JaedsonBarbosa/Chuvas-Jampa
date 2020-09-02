@@ -3,7 +3,9 @@ import { IEstacaoDetalhada, GetMedicao } from "./estacao"
 import { GerenciadorCores } from "./cores";
 import { DadosGeograficos } from "./geografia"
 
+const contexto = new ContextoGeral(false)
 const params = new URLSearchParams(location.search)
+let pularSelecao = false
 
 // Primeiro definimos as animações e o final
 const player = document.querySelector("lottie-player") as any
@@ -13,9 +15,13 @@ player.addEventListener("loop", (x: Event) => {
     if (concluido) {
         player.stop()
         player.remove()
-        //const pularMapa = params.get('pularMapa') ?? false
-        const ctrSucesso = document.getElementById('ctrSucesso')
-        ctrSucesso.style.visibility = 'visible'
+        contexto.pronto = true
+        if (pularSelecao || params.has('pularSelecao')) {
+            location.replace('main.html')
+        } else {
+            const ctrSucesso = document.getElementById('ctrSucesso')
+            ctrSucesso.style.visibility = 'visible'
+        }
     } else if (erro) {
         player.stop()
         player.loop = false
@@ -25,7 +31,6 @@ player.addEventListener("loop", (x: Event) => {
 player.play()
 
 // Analisamos se há novas configurações
-const contexto = new ContextoGeral(false)
 let tempo: number
 let cor: number
 if (params.has('tempo') && params.has('cor')) {
@@ -38,6 +43,7 @@ if (params.has('tempo') && params.has('cor')) {
         localStorage.setItem('paletaCor', corNova)
         tempo = Number(tempoNovo)
         cor = Number(corNova);
+        pularSelecao = true
     }
 } else {
     tempo = contexto.escalaTempo;
