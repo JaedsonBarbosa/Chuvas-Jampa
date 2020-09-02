@@ -23,49 +23,81 @@ mapa.on('locationfound', x => {
 })
 mapa.locate({ watch: true })
 
-let lastPopup
-mapa.on('click', e =>
-    lastPopup = L.popup()
-        .setLatLng(e.latlng)
-        .setContent(`Precipitação estimada:<br>${contexto.CalcularChuva(e.latlng.lat, e.latlng.lng).toFixed(2) ?? 'Sem dados'} mm`)
-        .openOn(mapa)
-);
-mapa.on('mouseout', () => lastPopup?.remove());
-const controleLayers = L.control.layers(undefined, undefined, {
-    position: 'topleft'
-}).addTo(mapa);
+// let lastPopup
+// mapa.on('click', e =>
+//     lastPopup = L.popup()
+//         .setLatLng(e.latlng)
+//         .setContent(`Precipitação estimada:<br>${contexto.CalcularChuva(e.latlng.lat, e.latlng.lng).toFixed(2) ?? 'Sem dados'} mm`)
+//         .openOn(mapa)
+// );
+// mapa.on('mouseout', () => lastPopup?.remove());
 
 const atribuicao = 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 
 //Adicionar base  normal
-controleLayers.addBaseLayer(L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}{r}.{ext}', {
+const fonteDetalhada = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}{r}.{ext}', {
     attribution: atribuicao,
     subdomains: 'abcd',
     minZoom: 0,
     maxZoom: 18,
     ext: 'png'
-}).addTo(mapa), "Normal");
+})
+fonteDetalhada.addTo(mapa)
 
 // Adicionar base simplificada
-controleLayers.addBaseLayer(L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/toner-lite/{z}/{x}/{y}{r}.{ext}', {
+const fonteSimplificada = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/toner-lite/{z}/{x}/{y}{r}.{ext}', {
     attribution: atribuicao,
     subdomains: 'abcd',
     minZoom: 0,
     maxZoom: 18,
     ext: 'png',
     detectRetina: true
-}), "Simplificado");
+})
 
-const ultAtt = document.getElementById('ultimaAtualizacao');
-ultAtt.innerHTML = new Date(contexto.ultimaAtualizacao).toLocaleString();
+const ctrFonte = L.control({ position: 'topleft' });
+ctrFonte.onAdd = function () {
+    const container = document.createElement("div");
+    const ligar = '\uE790'
+    const desligar = '\uF570'
+    container.onclick = (ev) => {
+        if ((ev.srcElement as any).innerHTML == desligar) {
+            mapa.removeLayer(fonteDetalhada)
+            mapa.addLayer(fonteSimplificada)
+            container.innerHTML = ligar
+            container.title = 'Usar mapa detalhado'
+        } else {
+            mapa.removeLayer(fonteSimplificada)
+            mapa.addLayer(fonteDetalhada)
+            container.innerHTML = desligar
+            container.title = 'Usar mapa simplificado'
+        }
+    }
+    container.className = 'leaflet-control-layers leaflet-control icon';
+    container.innerHTML = desligar;
+    container.title = 'Usar mapa simplificado'
+    return container;
+};
+
+const ctrConfig = L.control({ position: 'topleft' });
+ctrConfig.onAdd = function () {
+    const container = document.createElement("div");
+    container.title = 'Configurações'
+    container.onclick = (ev) => location.href = './settings.html'
+    container.className = 'leaflet-control-layers leaflet-control icon';
+    container.innerHTML = '\uE713';
+    return container;
+};
+
+ctrConfig.addTo(mapa);
+ctrFonte.addTo(mapa);
+
 const imagem = contexto.imagemChuvas;
 
 // Atualizar malha de dados
 L.imageOverlay(imagem, mapaUtil).addTo(mapa);
 
 // Atualizar marcadores
-const marcadores = L.layerGroup().addTo(mapa);
-controleLayers.addOverlay(marcadores, "Pluviômetros");
+const marcadores = L.layerGroup()
 for (const pluv of contexto.estacoes.filter(v => v.codibge === 2507507)) {
     const infoCompleta = `
     <h2>${pluv.nomeestacao}</h1>
@@ -76,6 +108,30 @@ for (const pluv of contexto.estacoes.filter(v => v.codibge === 2507507)) {
     const caixa = L.popup().setContent(infoCompleta)
     marcadores.addLayer(L.marker([pluv._latitude, pluv._longitude]).bindPopup(caixa));
 }
+marcadores.addTo(mapa)
+
+const ctrMarcadores = L.control({ position: 'topleft' });
+ctrMarcadores.onAdd = function () {
+    const container = document.createElement("div");
+    const ligar = '\uE707'
+    const desligar = '\uE77A'
+    container.onclick = (ev) => {
+        if ((ev.srcElement as any).innerHTML == desligar) {
+            marcadores.remove()
+            container.innerHTML = ligar
+            container.title = 'Mostrar as estações'
+        } else {
+            marcadores.addTo(mapa)
+            container.innerHTML = desligar
+            container.title = 'Não mostrar as estações'
+        }
+    }
+    container.className = 'leaflet-control-layers leaflet-control icon';
+    container.innerHTML = desligar;
+    container.title = 'Não mostrar as estações'
+    return container;
+};
+ctrMarcadores.addTo(mapa)
 
 // Atualizar barra de cores
 const nivelMinimo = contexto.cores.valorMinimo;

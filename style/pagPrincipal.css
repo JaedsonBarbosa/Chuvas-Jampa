@@ -1,15 +1,15 @@
-@media all and (orientation: portrait) {
-    .info.container { width: calc(100vw - 66px); }
-    .leaflet-touch .info.container { width: calc(100vw - 74px); }
-    .info.barra { width: calc(100vw - 66px); }
-    .leaflet-touch .info.barra { width: calc(100vw - 74px); }
+@font-face {
+    font-family: 'Segoe MDL2 Assets';
+    src: url(../fonts/segmdl2.ttf);
 }
 
-@media all and (orientation: landscape) {
-    .info.container { width: calc(100vw - 266px); }
-    .leaflet-touch .info.container { width: calc(100vw - 274px); }
-    .info.barra { width: calc(100vw - 266px); }
-    .leaflet-touch .info.barra { width: calc(100vw - 274px); }
+.icon {
+    font-family: 'Segoe MDL2 Assets';
+    font-size: 1.5rem;
+    width: 36px;
+    text-align: center;
+    user-select: none;
+    cursor: pointer;
 }
 
 #headerLegenda { display: none; }
@@ -17,22 +17,21 @@
 
 .info.container {
     position: relative;
+    width: calc(100vw - 66px);
     height: 36px;
     background-color: rgb(255, 255, 255, 0.5);
 }
 
 .leaflet-touch .info.container {
-    height: 44px;
     margin-top: 12px;
 }
 
 .info.barra {
     position: absolute;
     bottom: 0;
+    width: calc(100vw - 66px);
     height: 18px;
 }
-
-.leaflet-touch .info.barra { height: 22px; }
 
 .info.nivel {
     position: absolute;
@@ -41,11 +40,6 @@
     height: 36px;
     line-height: 18px;
     top: 0px;
-}
-
-.leaflet-touch .info.nivel {
-    height: 44px;
-    line-height: 22px;
 }
 
 .info.nivel.normal {
