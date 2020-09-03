@@ -3,11 +3,32 @@ import { GerenciadorCores } from "./cores"
 
 export class ContextoGeral
 {
-    private _pronto: boolean
-    get pronto() { return this._pronto }
-    set pronto(value) {
-        this._pronto = value
-        sessionStorage.setItem('pronto', value ? ' ' : '')
+    private _graficoPronto: boolean
+    get graficoPronto() { return this._graficoPronto }
+    set graficoPronto(value) {
+        this._graficoPronto = value
+        sessionStorage.setItem('graficoPronto', value ? ' ' : '')
+    }
+
+    private _valores: number[]
+    get valores() { return this._valores }
+    set valores(value) {
+        this._valores = value
+        sessionStorage.setItem('valores', JSON.stringify(value))
+    }
+
+    private _legendas: number[]
+    get legendas() { return this._legendas }
+    set legendas(value) {
+        this._legendas = value
+        sessionStorage.setItem('legendas', JSON.stringify(value))
+    }
+
+    private _mapaPronto: boolean
+    get mapaPronto() { return this._mapaPronto }
+    set mapaPronto(value) {
+        this._mapaPronto = value
+        sessionStorage.setItem('mapaPronto', value ? ' ' : '')
     }
 
     private _imagemChuvas: string
@@ -24,13 +45,6 @@ export class ContextoGeral
         sessionStorage.setItem('estacoes', JSON.stringify(value))
     }
 
-    private _ultimaAtualizacao: number
-    get ultimaAtualizacao() { return this._ultimaAtualizacao }
-    set ultimaAtualizacao(value) {
-        this._ultimaAtualizacao = value
-        sessionStorage.setItem('ultimaAtualizacao', value.toString())
-    }
-
     private _cores: GerenciadorCores
     get cores() { return this._cores }
     set cores(value) {
@@ -44,12 +58,16 @@ export class ContextoGeral
     private _paletaCor: number
     get paletaCor () { return this._paletaCor }
 
-    constructor(carregarPropsMain: boolean = true) {
-        if (carregarPropsMain) {
-            this._pronto = !!sessionStorage.getItem('pronto')
+    constructor(loadMapProps: boolean, loadGraphProps: boolean) {
+        if (loadGraphProps) {
+            this._graficoPronto = !!sessionStorage.getItem('graficoPronto')
+            this._valores = JSON.parse(sessionStorage.getItem('valores'))
+            this._legendas = JSON.parse(sessionStorage.getItem('legendas'))
+        }
+        if (loadMapProps) {
+            this._mapaPronto = !!sessionStorage.getItem('mapaPronto')
             this._imagemChuvas = sessionStorage.getItem('imagemChuvas')
             this._estacoes = JSON.parse(sessionStorage.getItem('estacoes'))
-            this._ultimaAtualizacao = Number(sessionStorage.getItem('ultimaAtualizacao'))
             this._cores = JSON.parse(sessionStorage.getItem('cores'))
         }
 

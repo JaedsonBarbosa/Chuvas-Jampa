@@ -1,6 +1,6 @@
 import { ContextoGeral } from "./contextoGeral";
 
-let contexto = new ContextoGeral(false)
+let contexto = new ContextoGeral(false, false)
 
 var ctrTempo1 = document.getElementById('ctrTempo1') as HTMLInputElement;
 ctrTempo1.checked = contexto.escalaTempo === 1;

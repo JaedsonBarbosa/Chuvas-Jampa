@@ -4,8 +4,8 @@ import { GetMedicao } from "./estacao"
 
 declare let L;
 
-const contexto = new ContextoGeral();
-if (contexto.pronto) {
+const contexto = new ContextoGeral(true, false);
+if (contexto.mapaPronto) {
     const dadosGeograficos = new DadosGeograficos(0.2);
 
     const mapaUtil = new L.LatLngBounds(new L.LatLng(dadosGeograficos.latMin, dadosGeograficos.lonMin, 0), new L.LatLng(dadosGeograficos.latMax, dadosGeograficos.lonMax, 0));
@@ -161,5 +161,5 @@ if (contexto.pronto) {
     };
     barra.addTo(mapa);
 } else {
-    location.replace('.?pularSelecao')
+    location.replace('.?diretoMapa')
 }

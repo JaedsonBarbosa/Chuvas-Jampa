@@ -3,10 +3,10 @@ import { IEstacaoDetalhada, GetMedicao } from "./estacao"
 import { GerenciadorCores } from "./cores";
 import { DadosGeograficos } from "./geografia"
 
-const contexto = new ContextoGeral(false)
+const contexto = new ContextoGeral(false, false)
 const params = new URLSearchParams(location.search)
-let pularMain = params.has('pularMain')
-let pularSelecao = false
+let idEstacao = params.get('idEstacao')
+let diretoMapa = false
 
 // Primeiro definimos as animações e o final
 const player = document.querySelector("lottie-player") as any
@@ -16,10 +16,12 @@ player.addEventListener("loop", (x: Event) => {
     if (concluido) {
         player.stop()
         player.remove()
-        contexto.pronto = true
-        if (pularMain) {
+        contexto.mapaPronto = true
+        if (params.has('diretoEscolhaEstacao')) {
+            location.replace('graphSettings.html')
+        } else if (idEstacao) {
             location.replace('graph.html')
-        } else if (pularSelecao || params.has('pularSelecao')) {
+        } else if (diretoMapa || params.has('diretoMapa')) {
             location.replace('map.html')
         } else {
             const ctrSucesso = document.getElementById('ctrSucesso')
@@ -33,8 +35,47 @@ player.addEventListener("loop", (x: Event) => {
 })
 player.play()
 
-if (pularMain) {
+if (idEstacao && contexto.mapaPronto) {
+    (async () => {
+        const resp = await fetch(`https://us-central1-chuvasjampa.cloudfunctions.net/obterAcumuladoHora?idEstacao=${idEstacao}&horas=340`);
+        if (resp.status !== 200) {
+            erro = true
+            return
+        }
+        const corpo = await resp.json();
+        const dadosCarregados = corpo as {
+            horarios: string[];
+            datas: string[];
+            acumulados: (number|null)[][];
+            readonly data: number;
+        }
 
+        const ultAtt = document.getElementById('ultimaAtualizacao');
+        ultAtt.style.visibility = 'visible'
+        ultAtt.innerHTML = new Date(dadosCarregados.data).toLocaleString()
+
+        function CorrigirData(dia: string, hora: string) {
+            const partesDia = dia.split('/');
+            const horaNum = Number(hora.replace('h', ''));
+            const data = new Date(Number(partesDia[2]), Number(partesDia[1]) - 1, Number(partesDia[0]), horaNum);
+            data.setHours(data.getHours() - 3);
+            return data;
+        }
+        let indexData = 0;
+        const valores: number[] = [];
+        const legendas = dadosCarregados.horarios.map((v, i) => {
+            const retorno = CorrigirData(dadosCarregados.datas[indexData], v)
+            const valor = dadosCarregados.acumulados[indexData][i] ?? 0;
+            valores.push(Number.isNaN(valor) ? 0 : valor);
+            if (v === '23h') { indexData++; }
+            return retorno.valueOf();
+        });
+        contexto.valores = valores
+        contexto.legendas = legendas
+
+        // Um leve delay pra quando a operação for muito rápida
+        setTimeout(() => concluido = true, 2000);
+    })()
 } else {
     // Analisamos se há novas configurações
     let tempo: number
@@ -49,7 +90,7 @@ if (pularMain) {
             localStorage.setItem('paletaCor', corNova)
             tempo = Number(tempoNovo)
             cor = Number(corNova);
-            pularSelecao = true
+            diretoMapa = true
         }
     } else {
         tempo = contexto.escalaTempo;
@@ -69,10 +110,9 @@ if (pularMain) {
             readonly data: number;
         };
 
-        contexto.ultimaAtualizacao = registros.data
         const ultAtt = document.getElementById('ultimaAtualizacao');
         ultAtt.style.visibility = 'visible'
-        ultAtt.innerHTML = new Date(contexto.ultimaAtualizacao).toLocaleString()
+        ultAtt.innerHTML = new Date(registros.data).toLocaleString()
 
         contexto.estacoes = registros.estacoes
         const dadosGeograficos = new DadosGeograficos(0.2);
