@@ -16,7 +16,7 @@ class Grafico {
                 labels: legendas,
                 series: [valores]
             },
-            { fullWidth: true, chartPadding: { left: 0 } });
+            { fullWidth: true, chartPadding: { left: 0, right: 0, top: 0, bottom: 10}});
             this.grafico.on('draw', this.PersonalizarBarras);
         } else {
             this.grafico.update({
@@ -74,23 +74,21 @@ if (contexto.idEstacaoPronta) {
     const ctrEstacao = document.getElementById('ctrEstacao')
     ctrEstacao.innerText = contexto.estacoes.find(v => v.idestacao == contexto.idEstacaoPronta).nomeestacao
 
-    const intervalo = 3
-    const legendas = contexto.legendas.map(v => new Date(v))
-
     function Format(valor: number) { return valor.toString(); }
     function DataString(data:Date) { return `${Format(data.getDate())}/${Format(data.getMonth() + 1)}`; }
 
+    const legendas = contexto.legendas.map(v => new Date(v))
     const graficoHoras = new Grafico('#grafHoras')
     graficoHoras.Atualizar(legendas.map(
         (data,i,a) => new Legenda(
             `${Format(data.getHours())}h\n${DataString(data)}`,
-            i % intervalo != 0 || i === a.length - 1)), contexto.valores)
+            i % 3 != 0 || i === a.length - 1)), contexto.valores)
 
     const graficosDias = new Grafico('#grafDias')
     const legendasHoras = legendas.map(v => DataString(v));
     const legendasDias = legendasHoras.filter((v,i,a) => i === a.indexOf(v));
     graficosDias.Atualizar(
-        legendasDias.map((v,i,a) => new Legenda(v, i % intervalo != 0 || i === a.length - 1)),
+        legendasDias.map((v,i,a) => new Legenda(v, i % 2 != 0 || i === a.length - 1)),
         legendasDias.map(dia => contexto.valores.filter((v,i) => legendasHoras[i] === dia).reduce((o,c) => o + c, 0)))
 
     document.getElementById('containerHoras').scrollLeft = 999999

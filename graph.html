@@ -10,7 +10,30 @@
     <link rel="stylesheet" href="style/geral.css" />
 </head>
 
-<body>
+<style>
+    .tooltip {
+        position: absolute;
+        background-color: black;
+        color: #fff;
+        text-align: center;
+        padding: 0.5rem 1rem;
+        z-index: 1;
+        width: 40vw;
+        max-width: 256px;
+    }
+
+    .tooltip.direto {
+        border-radius: 0 6px 6px 6px;
+        transform: translate(5px, 0);
+    }
+
+    .tooltip.inverso {
+        border-radius: 6px 0 6px 6px;
+        transform: translate(calc(-100% - 5px), 0);
+    }
+</style>
+
+<body style="text-align: center;">
     <h1 style="text-transform: uppercase;">Estação <span id="ctrEstacao"></span></h1>
     <h2>Chuva por hora (mm)</h2>
     <div id="containerHoras" style="overflow-x: auto; overflow-y: hidden;">
