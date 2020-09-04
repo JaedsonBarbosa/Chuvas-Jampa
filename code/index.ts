@@ -25,7 +25,7 @@ import { DadosGeograficos } from "./geografia"
                 location.replace('map.html')
             } else {
                 const ctrSucesso = document.getElementById('ctrSucesso')
-                ctrSucesso.style.visibility = 'visible'
+                ctrSucesso.style.display = 'block'
             }
         } else if (erro) {
             player.stop()
