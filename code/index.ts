@@ -3,40 +3,39 @@ import { IEstacaoDetalhada, GetMedicao } from "./estacao"
 import { GerenciadorCores } from "./cores";
 import { DadosGeograficos } from "./geografia"
 
-const contexto = new ContextoGeral(false, false)
-const params = new URLSearchParams(location.search)
-let idEstacao = params.get('idEstacao')
-let diretoMapa = false
+(async () => {
+    const contexto = new ContextoGeral(true, false)
+    const params = new URLSearchParams(location.search)
+    const idEstacao = params.get('idEstacao')
+    let diretoMapa = false
 
-// Primeiro definimos as animações e o final
-const player = document.querySelector("lottie-player") as any
-let concluido = false;
-let erro = false;
-player.addEventListener("loop", (x: Event) => {
-    if (concluido) {
-        player.stop()
-        player.remove()
-        contexto.mapaPronto = true
-        if (params.has('diretoEscolhaEstacao')) {
-            location.replace('graphSettings.html')
-        } else if (idEstacao) {
-            location.replace('graph.html')
-        } else if (diretoMapa || params.has('diretoMapa')) {
-            location.replace('map.html')
-        } else {
-            const ctrSucesso = document.getElementById('ctrSucesso')
-            ctrSucesso.style.visibility = 'visible'
+    // Primeiro definimos as animações e o final
+    const player = document.querySelector("lottie-player") as any
+    let concluido = false;
+    let erro = false;
+    player.addEventListener("loop", (x: Event) => {
+        if (concluido) {
+            player.stop()
+            player.remove()
+            if (params.has('diretoEscolhaEstacao')) {
+                location.replace('graphSettings.html')
+            } else if (idEstacao) {
+                location.replace('graph.html')
+            } else if (diretoMapa || params.has('diretoMapa')) {
+                location.replace('map.html')
+            } else {
+                const ctrSucesso = document.getElementById('ctrSucesso')
+                ctrSucesso.style.visibility = 'visible'
+            }
+        } else if (erro) {
+            player.stop()
+            player.loop = false
+            player.load('https://assets4.lottiefiles.com/packages/lf20_KWZHHd.json')
         }
-    } else if (erro) {
-        player.stop()
-        player.loop = false
-        player.load('https://assets4.lottiefiles.com/packages/lf20_KWZHHd.json')
-    }
-})
-player.play()
+    })
+    player.play()
 
-if (idEstacao && contexto.mapaPronto) {
-    (async () => {
+    if (idEstacao && contexto.mapaPronto) {
         const resp = await fetch(`https://us-central1-chuvasjampa.cloudfunctions.net/obterAcumuladoHora?idEstacao=${idEstacao}&horas=340`);
         if (resp.status !== 200) {
             erro = true
@@ -46,7 +45,7 @@ if (idEstacao && contexto.mapaPronto) {
         const dadosCarregados = corpo as {
             horarios: string[];
             datas: string[];
-            acumulados: (number|null)[][];
+            acumulados: (number | null)[][];
             readonly data: number;
         }
 
@@ -72,33 +71,32 @@ if (idEstacao && contexto.mapaPronto) {
         });
         contexto.valores = valores
         contexto.legendas = legendas
-
+        contexto.idEstacaoPronta = idEstacao
+        
         // Um leve delay pra quando a operação for muito rápida
         setTimeout(() => concluido = true, 2000);
-    })()
-} else {
-    // Analisamos se há novas configurações
-    let tempo: number
-    let cor: number
-    if (params.has('tempo') && params.has('cor')) {
-        const tempoNovo = params.get('tempo')
-        const corNova = params.get('cor')
-        const tempoValido = tempoNovo === '1' || tempoNovo === '3' || tempoNovo === '12' || tempoNovo === '24'
-        const corValida = corNova === '0' || corNova === '1'
-        if (tempoValido && corValida) {
-            localStorage.setItem('escalaTempo', tempoNovo)
-            localStorage.setItem('paletaCor', corNova)
-            tempo = Number(tempoNovo)
-            cor = Number(corNova);
-            diretoMapa = true
-        }
     } else {
-        tempo = contexto.escalaTempo;
-        cor = contexto.paletaCor;
-    }
+        // Analisamos se há novas configurações
+        let tempo: number
+        let cor: number
+        if (params.has('tempo') && params.has('cor')) {
+            const tempoNovo = params.get('tempo')
+            const corNova = params.get('cor')
+            const tempoValido = tempoNovo === '1' || tempoNovo === '3' || tempoNovo === '12' || tempoNovo === '24'
+            const corValida = corNova === '0' || corNova === '1'
+            if (tempoValido && corValida) {
+                localStorage.setItem('escalaTempo', tempoNovo)
+                localStorage.setItem('paletaCor', corNova)
+                tempo = Number(tempoNovo)
+                cor = Number(corNova);
+                diretoMapa = true
+            }
+        } else {
+            tempo = contexto.escalaTempo;
+            cor = contexto.paletaCor;
+        }
 
-    // Fazemos a requisição e processamos
-    (async () => {
+        // Fazemos a requisição e processamos
         const resp = await fetch("https://us-central1-chuvasjampa.cloudfunctions.net/obterRegistros");
         if (resp.status !== 200) {
             erro = true
@@ -151,8 +149,9 @@ if (idEstacao && contexto.mapaPronto) {
         canvasContext.putImageData(imageData, 0, 0);
         contexto.imagemChuvas = canvas.toDataURL("image/png");
         contexto.cores = niveis
+        contexto.mapaPronto = true
 
         // Um leve delay pra quando a operação for muito rápida
         setTimeout(() => concluido = true, 2000);
-    })()
-}
+    }
+})()

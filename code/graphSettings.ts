@@ -1,6 +1,6 @@
 import { ContextoGeral } from "./contextoGeral";
 
-let contexto = new ContextoGeral(false, false)
+let contexto = new ContextoGeral(true, false)
 
 if (contexto.mapaPronto) {
     const ctrOpcoes = document.getElementById('ctrOpcoes')

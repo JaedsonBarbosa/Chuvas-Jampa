@@ -3,11 +3,11 @@ import { GerenciadorCores } from "./cores"
 
 export class ContextoGeral
 {
-    private _graficoPronto: boolean
-    get graficoPronto() { return this._graficoPronto }
-    set graficoPronto(value) {
-        this._graficoPronto = value
-        sessionStorage.setItem('graficoPronto', value ? ' ' : '')
+    private _idEstacaoPronta: string
+    get idEstacaoPronta() { return this._idEstacaoPronta }
+    set idEstacaoPronta(value) {
+        this._idEstacaoPronta = value
+        sessionStorage.setItem('idEstacaoPronta', value)
     }
 
     private _valores: number[]
@@ -60,7 +60,7 @@ export class ContextoGeral
 
     constructor(loadMapProps: boolean, loadGraphProps: boolean) {
         if (loadGraphProps) {
-            this._graficoPronto = !!sessionStorage.getItem('graficoPronto')
+            this._idEstacaoPronta = sessionStorage.getItem('idEstacaoPronta')
             this._valores = JSON.parse(sessionStorage.getItem('valores'))
             this._legendas = JSON.parse(sessionStorage.getItem('legendas'))
         }
