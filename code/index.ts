@@ -1,6 +1,6 @@
 import { ContextoGeral } from "./contextoGeral"
 import { IEstacaoDetalhada, GetMedicao } from "./estacao"
-import { GerenciadorCores } from "./cores";
+import { GerenciadorCores } from "./cores"
 import { DadosGeograficos } from "./geografia"
 
 (async () => {
@@ -155,3 +155,21 @@ import { DadosGeograficos } from "./geografia"
         setTimeout(() => concluido = true, 2000);
     }
 })()
+
+const ctrMapa = document.getElementById('ctrMapa') as HTMLButtonElement
+ctrMapa.onclick = () => {
+    document.body.className = 'fade-out'
+    setTimeout(() => location.href = 'map.html', 2500)
+}
+
+const ctrGraficos = document.getElementById('ctrGraficos') as HTMLButtonElement
+ctrGraficos.onclick = () => {
+    document.body.className = 'fade-out'
+    setTimeout(() => location.href = 'graphSettings.html', 2500)
+}
+
+const ctrSobre = document.getElementById('ctrSobre') as HTMLButtonElement
+ctrSobre.onclick = () => {
+    document.body.className = 'fade-out'
+    setTimeout(() => location.href = 'about.html', 2500)
+}

@@ -13,7 +13,10 @@ if (contexto.mapaPronto) {
     location.replace('.?diretoEscolhaEstacao')
 }
 
-//AQUI A META É CRIAR OS RADIOS PRA ESCOLHER A ESTAÇÃO
-//PRA FACILITAR TUDO SERÁ USADO UM SIMPLES FORM
-//TAMBÉM DEVE SER USADO O REQUIRED PARA QUE UM SEJA ESCOLHIDO
-//DEPOIS É SÓ FAZER O RESTO DA LÓGICA DA PÁGINA DE DETALHES
+const form = document.getElementsByTagName('form')[0]
+const salvar = document.getElementById('ctrSalvar') as HTMLButtonElement
+salvar.onclick = () => {
+    document.body.className = 'fade-out'
+    setTimeout(() => form.submit(), 2500)
+}
+setTimeout(() => document.body.className = 'fade-in', 1000)

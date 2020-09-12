@@ -10,12 +10,18 @@
     <link rel="stylesheet" href="style/settings.css" />
 </head>
 
+<style>
+    body { transition: 2s; opacity: 0;}
+    .fade-in { opacity: 1; }
+    .fade-out { opacity: 0; }
+</style>
+
 <body>
     <form action="." method="GET" >
         <h1>Configurações</h1>
         <h2>Escolha a estação</h2>
         <div id="ctrOpcoes"></div>
-        <input id="ctrSalvar" type="submit" value="Salvar alterações">
+        <input id="ctrSalvar" type="button" value="Salvar alterações">
     </form>
     <script src="code/graphSettings.ts"></script>
 </body>

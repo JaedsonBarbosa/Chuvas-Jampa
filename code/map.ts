@@ -11,7 +11,7 @@ if (contexto.mapaPronto) {
     const mapaUtil = new L.LatLngBounds(new L.LatLng(dadosGeograficos.latMin, dadosGeograficos.lonMin, 0), new L.LatLng(dadosGeograficos.latMax, dadosGeograficos.lonMax, 0));
     const mapa = L.map('corpo', {
         center: mapaUtil.getCenter(),
-        zoom: 14,
+        zoom: 13,
         minZoom: 13,
         maxZoom: 18,
         maxBounds: mapaUtil,
@@ -86,7 +86,11 @@ if (contexto.mapaPronto) {
     ctrConfig.onAdd = function () {
         const container = document.createElement("div");
         container.title = 'Configurações'
-        container.onclick = (ev) => location.href = 'mapSettings.html'
+        container.onclick = () => {
+            document.body.classList.remove('fade-in')
+            document.body.classList.add('fade-out')
+            setTimeout(() => location.href = 'mapSettings.html', 2500)
+        }
         container.className = 'leaflet-control-layers leaflet-control icon';
         container.innerHTML = '\uE713';
         return container;
@@ -160,6 +164,8 @@ if (contexto.mapaPronto) {
         return container;
     };
     barra.addTo(mapa);
+    
+    setTimeout(() => document.body.classList.add('fade-in'), 1000)
 } else {
     location.replace('.?diretoMapa')
 }

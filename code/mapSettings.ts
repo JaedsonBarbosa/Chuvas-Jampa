@@ -22,8 +22,8 @@ ctrCorAgressiva.checked = contexto.paletaCor === 1;
 
 const form = document.getElementsByTagName('form')[0]
 const salvar = document.getElementById('ctrSalvar') as HTMLButtonElement
-salvar.onclick = ev => {
-    form.className = 'fade-out'
+salvar.onclick = () => {
+    document.body.className = 'fade-out'
     setTimeout(() => form.submit(), 2500)
 }
-setTimeout(() => form.className = 'fade-in', 1000)
+setTimeout(() => document.body.className = 'fade-in', 1000) 

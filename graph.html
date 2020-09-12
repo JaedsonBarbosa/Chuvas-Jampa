@@ -31,20 +31,10 @@
         border-radius: 6px 0 6px 6px;
         transform: translate(calc(-100% - 5px), 0);
     }
-
-    .botao {
-        background-color: #5562eb;
-        display: block;
-        margin: 10px 0 0 0;
-        font-size: 1.17rem;
-        font-weight: bold;
-        padding: 1rem 1.5rem;
-        text-align: left;
-        color: #fff;
-        text-decoration-line: initial;
-        text-align: center;
-        text-transform: uppercase;
-    }
+    
+    body { transition: 2s; opacity: 0;}
+    .fade-in { opacity: 1; }
+    .fade-out { opacity: 0; }
 </style>
 
 <body style="text-align: center;">
@@ -55,7 +45,7 @@
     </div>
     <h2>Chuva por dia (mm)</h2>
     <div id="grafDias" style="width: 100%; height: 300px;"></div>
-    <a href="graphSettings.html" class="botao">escolher outra estação</a>
+    <button class="botao" id="ctrOutra">escolher outra estação</button>
     <script src="code/graph.ts"></script>
 </body>
  

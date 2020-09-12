@@ -95,3 +95,10 @@ if (contexto.idEstacaoPronta) {
 } else {
     location.replace('graphSettings.html')
 }
+
+const salvar = document.getElementById('ctrOutra') as HTMLButtonElement
+salvar.onclick = () => {
+    document.body.className = 'fade-out'
+    setTimeout(() => location.href = 'graphSettings.html', 2500)
+}
+setTimeout(() => document.body.className = 'fade-in', 1000)
