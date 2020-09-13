@@ -3,6 +3,8 @@ import { IEstacaoDetalhada, GetMedicao } from "./estacao"
 import { GerenciadorCores } from "./cores"
 import { DadosGeograficos } from "./geografia"
 
+var concluido = false;
+var erro = false;
 (async () => {
     const contexto = new ContextoGeral(true, false)
     const params = new URLSearchParams(location.search)
@@ -11,11 +13,10 @@ import { DadosGeograficos } from "./geografia"
 
     // Primeiro definimos as animações e o final
     const player = document.querySelector("lottie-player") as any
-    let concluido = false;
-    let erro = false;
-    player.addEventListener("loop", (x: Event) => {
+    let ignore = false;
+    player.addEventListener("complete", (x: Event) => {
+        if (ignore) return
         if (concluido) {
-            player.stop()
             player.remove()
             if (params.has('diretoEscolhaEstacao')) {
                 location.replace('graphSettings.html')
@@ -28,9 +29,12 @@ import { DadosGeograficos } from "./geografia"
                 ctrSucesso.style.display = 'block'
             }
         } else if (erro) {
-            player.stop()
-            player.loop = false
+            ignore = true
+            player.addEventListener('load', () => player.play())
             player.load('https://assets4.lottiefiles.com/packages/lf20_KWZHHd.json')
+        } else {
+            player.seek(0)
+            player.play()
         }
     })
     player.play()
@@ -150,11 +154,8 @@ import { DadosGeograficos } from "./geografia"
         contexto.imagemChuvas = canvas.toDataURL("image/png");
         contexto.cores = niveis
         contexto.mapaPronto = true
-
-        // Um leve delay pra quando a operação for muito rápida
-        setTimeout(() => concluido = true, 2000);
     }
-})()
+})().then(() => setTimeout(() => concluido = true, 1000)).catch(() => erro = true)
 
 const ctrMapa = document.getElementById('ctrMapa') as HTMLButtonElement
 ctrMapa.onclick = () => {
