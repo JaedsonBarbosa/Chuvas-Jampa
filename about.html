@@ -6,10 +6,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chuvas Jampa</title>
     <link rel="shortcut icon" type="image/png" href="images/Chuvas Jampa.png"/>
+    <link rel="stylesheet" href="style/geral.css" />
     <link rel="stylesheet" href="https://stackedit.io/style.css" />
 </head>
 
-<body class="stackedit">
+<style>
+    .stackedit__html {
+        margin-bottom: 0;
+    }
+
+    body { 
+        transition: 2s;
+        opacity: 0;
+    }
+    
+    .fade-in { opacity: 1; }
+    .fade-out { opacity: 0; }
+</style>
+
+<body>
     <div class="stackedit__html">
         <h1 id="sobre-o-projeto">Sobre o projeto</h1>
         <p>Atualmente o monitoramento de áreas de risco em localidades vulneráveis tem-se tornado uma ferramenta para a
@@ -34,6 +49,8 @@
             usando o <a href="https://gionkunz.github.io/chartist-js">Chartist</a>. Além dos dados coletados por nossas
             estações também são usados os registros do <a href="http://www.cemaden.gov.br/">CEMADEN</a>.</p>
     </div>
+    <button class="botao" id="ctrInicio">voltar para o início</button>
+    <script src="code/about.ts"></script>
 </body>
 
 </html>

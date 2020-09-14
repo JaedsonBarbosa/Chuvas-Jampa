@@ -26,6 +26,6 @@ salvar.onclick = () => {
     document.body.className = 'fade-out'
     const tempo = form.elements['tempo'].value
     const cor = form.elements['cor'].value
-    setTimeout(() => location.href = `.?tempo=${tempo}&cor=${cor}`, 2500)
+    setTimeout(() => location.href = `.?tempo=${tempo}&cor=${cor}`, 2000)
 }
 setTimeout(() => document.body.className = 'fade-in', 1000) 

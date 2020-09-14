@@ -108,13 +108,13 @@ if (contexto.idEstacaoPronta) {
 const salvar = document.getElementById('ctrOutra') as HTMLButtonElement
 salvar.onclick = () => {
     document.body.className = 'fade-out'
-    setTimeout(() => location.href = 'graphSettings.html', 2500)
+    setTimeout(() => location.href = 'graphSettings.html', 2000)
 }
 
 const ctrMapa = document.getElementById('ctrMapa') as HTMLButtonElement
 ctrMapa.onclick = () => {
     document.body.className = 'fade-out'
-    setTimeout(() => location.href = '.', 2500)
+    setTimeout(() => location.href = '.', 2000)
 }
 
 setTimeout(() => document.body.className = 'fade-in', 1000)

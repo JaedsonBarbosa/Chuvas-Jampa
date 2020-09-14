@@ -74,9 +74,6 @@ var erro = false;
         contexto.valores = valores
         contexto.legendas = legendas
         contexto.idEstacaoPronta = idEstacao
-        
-        // Um leve delay pra quando a operação for muito rápida
-        setTimeout(() => concluido = true, 2000);
     } else {
         // Analisamos se há novas configurações
         let tempo: number
@@ -155,17 +152,17 @@ var erro = false;
 const ctrMapa = document.getElementById('ctrMapa') as HTMLButtonElement
 ctrMapa.onclick = () => {
     document.body.className = 'fade-out'
-    setTimeout(() => location.href = 'map.html', 2500)
+    setTimeout(() => location.href = 'map.html', 2000)
 }
 
 const ctrGraficos = document.getElementById('ctrGraficos') as HTMLButtonElement
 ctrGraficos.onclick = () => {
     document.body.className = 'fade-out'
-    setTimeout(() => location.href = 'graphSettings.html', 2500)
+    setTimeout(() => location.href = 'graphSettings.html', 2000)
 }
 
 const ctrSobre = document.getElementById('ctrSobre') as HTMLButtonElement
 ctrSobre.onclick = () => {
     document.body.className = 'fade-out'
-    setTimeout(() => location.href = 'about.html', 2500)
+    setTimeout(() => location.href = 'about.html', 2000)
 }

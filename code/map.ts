@@ -89,7 +89,7 @@ if (contexto.mapaPronto) {
         container.onclick = () => {
             document.body.classList.remove('fade-in')
             document.body.classList.add('fade-out')
-            setTimeout(() => location.href = 'mapSettings.html', 2500)
+            setTimeout(() => location.href = 'mapSettings.html', 2000)
         }
         container.className = 'leaflet-control-layers leaflet-control icon';
         container.innerHTML = '\uE713';
@@ -103,7 +103,7 @@ if (contexto.mapaPronto) {
         container.onclick = () => {
             document.body.classList.remove('fade-in')
             document.body.classList.add('fade-out')
-            setTimeout(() => location.href = 'graphSettings.html', 2500)
+            setTimeout(() => location.href = 'graphSettings.html', 2000)
         }
         container.className = 'leaflet-control-layers leaflet-control icon';
         container.innerHTML = '\uE9D2';
@@ -117,7 +117,7 @@ if (contexto.mapaPronto) {
         container.onclick = () => {
             document.body.classList.remove('fade-in')
             document.body.classList.add('fade-out')
-            setTimeout(() => location.href = '.?diretoMapa', 2500)
+            setTimeout(() => location.href = '.?diretoMapa', 2000)
         }
         container.className = 'leaflet-control-layers leaflet-control icon';
         container.innerHTML = '\uE72C';
@@ -151,7 +151,7 @@ if (contexto.mapaPronto) {
         botao.onclick = () => {
             document.body.classList.remove('fade-in')
             document.body.classList.add('fade-out')
-            setTimeout(() => location.href = `.?idEstacao=${pluv.idestacao}`, 2500)
+            setTimeout(() => location.href = `.?idEstacao=${pluv.idestacao}`, 2000)
         }
         content.appendChild(botao)
         //<a href=".?idEstacao=${pluv.idestacao}">Ver informações detalhadas</a>

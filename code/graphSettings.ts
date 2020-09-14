@@ -21,7 +21,7 @@ if (contexto.mapaPronto) {
         div.appendChild(input)
         input.onclick = () => {
             document.body.className = 'fade-out'
-            setTimeout(() => location.href = `.?idEstacao=${v.idestacao}`, 2500)
+            setTimeout(() => location.href = `.?idEstacao=${v.idestacao}`, 2000)
         }
         const label = document.createElement('label')
         label.htmlFor = v.idestacao
