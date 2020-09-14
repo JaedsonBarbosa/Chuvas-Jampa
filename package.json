@@ -2,10 +2,17 @@
   "name": "chuvas-jampa",
   "author": "Jaedson Barbosa Serafim",
   "version": "1.0.0",
+  "browserslist": [
+    "last 2 Chrome versions"
+  ],
   "scripts": {
     "build": "parcel build index.html"
   },
   "devDependencies": {
-    "parcel": "^1.12.4"
+    "parcel": "^1.12.4",
+    "typescript": "^4.0.2"
+  },
+  "dependencies": {
+    "@lottiefiles/lottie-player": "^0.5.1"
   }
 }

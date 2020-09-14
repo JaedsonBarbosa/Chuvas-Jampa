@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chuvas Jampa</title>
+    <link rel="shortcut icon" type="image/png" href="images/Chuvas Jampa.png"/>
+    <link rel="stylesheet" href="style/chartist.css" />
+    <link rel="stylesheet" href="style/geral.css" />
+</head>
+
+<style>
+    .tooltip {
+        position: absolute;
+        background-color: black;
+        color: #fff;
+        text-align: center;
+        padding: 0.5rem 1rem;
+        z-index: 1;
+        width: 40vw;
+        max-width: 256px;
+    }
+
+    .tooltip.direto {
+        border-radius: 0 6px 6px 6px;
+        transform: translate(5px, 0);
+    }
+
+    .tooltip.inverso {
+        border-radius: 6px 0 6px 6px;
+        transform: translate(calc(-100% - 5px), 0);
+    }
+    
+    body { transition: 2s; opacity: 0;}
+    .fade-in { opacity: 1; }
+    .fade-out { opacity: 0; }
+
+    #legenda div {
+        padding: 0.5rem
+    }
+</style>
+
+<body style="text-align: center;">
+    <h1 style="text-transform: uppercase;">Estação <span id="ctrEstacao"></span></h1>
+    <h2>Chuva por hora (mm)</h2>
+    <div id="containerHoras" style="overflow-x: auto; overflow-y: hidden;">
+        <div id="grafHoras" style="width: 5000px; height: 300px;"></div>
+    </div>
+    <h2>Chuva por dia (mm)</h2>
+    <div id="grafDias" style="width: 100%; height: 300px;"></div>
+    <h2>Legenda</h2>
+    <div id="legenda" style="display: block;">
+        <div style="background: rgb(0, 255, 0, 0.7)">Nada previsto<br>até 20 mm de chuva</div>
+        <div style="background: rgb(255, 255, 0, 0.7)">Perigo potencial<br>até 30 mm por hora ou 50 mm por dia</div>
+        <div style="background: rgb(255, 102, 0, 0.7)">Perigo<br>até 60 mm por hora ou 100 mm por dia</div>
+        <div style="background: rgb(255, 0, 0, 0.7)">Grande perigo<br>acima de 60 mm por hora ou 100 mm por dia</div>
+    </div>
+    <button class="botao" id="ctrOutra">escolher outra estação</button>
+    <button class="botao" id="ctrMapa">voltar para o início</button>
+    <script src="code/graph.ts"></script>
+</body>
+ 
+</html>

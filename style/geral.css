@@ -1,0 +1,32 @@
+@font-face {
+    font-family: MavenPro;
+    src: url(../fonts/MavenPro.ttf);
+}
+
+* {
+    box-sizing: border-box;
+    font-family: MavenPro;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.botao {
+    width: 100%;
+    background-color: #5562eb;
+    display: block;
+    position: relative;
+    font-size: 1.17rem;
+    font-weight: bold;
+    border: 0;
+    text-align: center;
+    text-transform: uppercase;
+    margin: 10px 0 0 0;
+    padding: 1rem 1.5rem;
+    color: #fff;
+    cursor: pointer;
+}

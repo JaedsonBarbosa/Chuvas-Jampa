@@ -1,12 +1,62 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <title>The begin</title>
-        <script>
-            console.log("ihu");
-        </script>
-    </head>
-    <body>
-        <h1>Que os jogos comecem!</h1>
-    </body>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chuvas Jampa</title>
+    <link rel="shortcut icon" type="image/png" href="images/Chuvas Jampa.png"/>
+    <link rel="stylesheet" href="style/geral.css" />
+</head>
+
+<style>
+    body {
+        max-width: 500px;
+        margin: auto;
+        padding: 0 16px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        text-align: center;
+    }
+
+    h1 {
+        margin: 0;
+        text-align: center;
+    }
+
+    body { transition: 2s; }
+    .fade-in { transition: 2s; opacity: 1; }
+    .fade-out { opacity: 0; }
+</style>
+
+<!--
+    OK ADICIONAR BOTÃO DO GRÁFICO NO MAPA
+    OK ADICIONAR BOTÃO DO MAPA NO GRÁFICO
+    OK CONECTAR MARCADORES DAS ESTAÇÕES NO GRÁFICO
+    OK INSERIR TRANSIÇÃO PARA EXIBIR O MENU DO INDEX TAMBÉM É ESSENCIAL
+    OK TROCAR FORMA DE USO DAS CONFIGURAÇÕES DO GRÁFICO, QUE DEVE SER INSTANTÂNEA
+    OK TORNAR GRÁFICOS COLORIDOS, A LEGENDA VAI FICAR NO FINAL, BEM DETALHADA
+-->
+
+<body>
+    <script src="code/loadLottie.ts"></script>
+    <lottie-player id="ctrAnimacao" src="https://assets3.lottiefiles.com/packages/lf20_x9pEKm.json" background="transparent" speed="1" style="width: 200px; height: 200px; align-self: center;"></lottie-player>
+    <div id="ctrSucesso" class="fade-out" style="display: none;">
+        <h1>CHUVAS JAMPA</h1>
+        <button class="botao" id="ctrMapa">Ver mapa</button>
+        <button class="botao" id="ctrGraficos">Ver gráficos</button>
+        <button class="botao" id="ctrSobre">Sobre o projeto</button>
+    </div>
+    <!-- Região de mapeamento -->
+    <div style="display:none">
+        <a href="map.html">Ver mapa</a>
+        <a href="graphSettings.html">Ver gráficos</a>
+        <a href="graph.html">Ver gráficos [Ignorar]</a>
+        <a href="mapSettings.html">Configurações do mapa [Ignorar]</a>
+        <a href="about.html">Sobre o projeto</a>
+    </div>
+    <script src="code/index.ts"></script>
+</body>
+
 </html>

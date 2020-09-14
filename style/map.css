@@ -1,0 +1,52 @@
+@font-face {
+    font-family: 'Segoe MDL2 Assets';
+    src: url(../fonts/segmdl2.ttf);
+}
+
+.icon {
+    font-family: 'Segoe MDL2 Assets';
+    font-size: 1.5rem;
+    width: 36px;
+    text-align: center;
+    user-select: none;
+    cursor: pointer;
+}
+
+.info.container {
+    position: relative;
+    width: calc(100vw - 66px);
+    height: 36px;
+    background-color: rgb(255, 255, 255, 0.5);
+}
+
+.leaflet-touch .info.container {
+    margin-top: 12px;
+}
+
+.info.barra {
+    position: absolute;
+    bottom: 0;
+    width: calc(100vw - 66px);
+    height: 18px;
+}
+
+.info.nivel {
+    position: absolute;
+    font-size: medium;
+    width: 80px;
+    height: 36px;
+    line-height: 18px;
+    top: 0px;
+}
+
+.info.nivel.normal {
+    border-left-style: solid;
+    border-left-width: thin;
+}
+
+.info.nivel.invertido {
+    border-right-style: solid;
+    border-right-width: thin;
+    text-align: right;
+    transform: translateX(-80px);
+}

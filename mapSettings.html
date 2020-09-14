@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chuvas Jampa</title>
+    <link rel="shortcut icon" type="image/png" href="images/Chuvas Jampa.png"/>
+    <link rel="stylesheet" href="style/geral.css" />
+    <link rel="stylesheet" href="style/settings.css" />
+</head>
+
+<style>
+    body { transition: 2s; opacity: 0;}
+    .fade-in { opacity: 1; }
+    .fade-out { opacity: 0; }
+</style>
+
+<body>
+    <form action="." method="GET">
+        <h1>Configurações</h1>
+        <h2>Escala de tempo</h2>
+        <div class="inputGroup">
+            <input id="ctrTempo1" name="tempo" type="radio" value="1" />
+            <label for="ctrTempo1">Última hora</label>
+        </div>
+        <div class="inputGroup">
+            <input id="ctrTempo3" name="tempo" type="radio" value="3" />
+            <label for="ctrTempo3">Últimas 3 horas</label>
+        </div>
+        <div class="inputGroup">
+            <input id="ctrTempo12" name="tempo" type="radio" value="12" />
+            <label for="ctrTempo12">Últimas 12 horas</label>
+        </div>
+        <div class="inputGroup">
+            <input id="ctrTempo24" name="tempo" type="radio" value="24" />
+            <label for="ctrTempo24">Últimas 24 horas</label>
+        </div>
+        <h2>Paleta de cores</h2>
+        <div class="inputGroup">
+            <input id="ctrCorSuave" name="cor" type="radio" value="0" />
+            <label for="ctrCorSuave">Suave</label>
+        </div>
+        <div class="inputGroup">
+            <input id="ctrCorAgressiva" name="cor" type="radio" value="1" />
+            <label for="ctrCorAgressiva">Agressiva</label>
+        </div>
+        <input id="ctrSalvar" type="button" value="Salvar alterações">
+    </form>
+    <script src="code/mapSettings.ts"></script>
+</body>
+
+</html>

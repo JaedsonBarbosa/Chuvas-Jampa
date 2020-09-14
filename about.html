@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chuvas Jampa</title>
+    <link rel="shortcut icon" type="image/png" href="images/Chuvas Jampa.png"/>
+    <link rel="stylesheet" href="style/geral.css" />
+    <link rel="stylesheet" href="https://stackedit.io/style.css" />
+</head>
+
+<style>
+    .stackedit__html {
+        margin-bottom: 0;
+    }
+
+    body { 
+        transition: 2s;
+        opacity: 0;
+    }
+    
+    .fade-in { opacity: 1; }
+    .fade-out { opacity: 0; }
+</style>
+
+<body>
+    <div class="stackedit__html">
+        <h1 id="sobre-o-projeto">Sobre o projeto</h1>
+        <p>Atualmente o monitoramento de áreas de risco em localidades vulneráveis tem-se tornado uma ferramenta para a
+            efetiva tomada de decisões de ajuda e de suporte diante de desastres naturais, como por exemplo, as chuvas.
+            No município de João Pessoa, no ano 2017, foi realizado o levantamento de comunidades localizadas em áreas
+            de risco, sendo totalizadas 27, evidenciando-se a necessidade do continuo monitoramento deste tipo de
+            locais. Embora a Defesa Civil de João Pessoa e os órgãos estejam sistematicamente realizando este tipo de
+            tarefas, a infraestrutura utilizada para tais atividades sempre é limitada. Assim, neste projeto de extensão
+            PROBEX 2020, tem-se como objetivo contribuir com a infraestrutura de monitoramento de chuvas, para assim
+            diminuir os efeitos em perdas humanas e perdas financeiras provocadas pelos fenômenos naturais.
+            Complementarmente, pretendesse estabelecer iniciativas para a gestão de cidades inteligentes na região.</p>
+        <h2 id="sobre-o-chuvas-jampa">Sobre o Chuvas Jampa</h2>
+        <p>Este sistema tem como finalidade permitir que o cidadão comum possa usufruir dos resultados desse projeto,
+            podendo então ver as chuvas de João Pessoa em um mapa colorido de acordo com suas preferências, onde tanto
+            cores, niveis usados e escala de tempo são customizáveis. Para a obtenção dos dados são usadas atualmente as
+            mesmas estações pluviométricas usadas pela Defesa Civil, as estações do CEMADEN (Centro Nacional de
+            Monitoramento e Alertas de Desastres Naturais), mas esta rede será expandida por meio do uso dos
+            pluviômetros de baixo custo que estamos desenvolvendo e que serão instalados nas áreas cuja cobertura da
+            rede atual é deficitária.</p>
+        <h2 id="detalhes-adicionais">Detalhes adicionais</h2>
+        <p>O mapa é gerado usando o <a href="https://leafletjs.com">Leaflet</a> enquanto os gráficos são todos gerados
+            usando o <a href="https://gionkunz.github.io/chartist-js">Chartist</a>. Além dos dados coletados por nossas
+            estações também são usados os registros do <a href="http://www.cemaden.gov.br/">CEMADEN</a>.</p>
+    </div>
+    <button class="botao" id="ctrInicio">voltar para o início</button>
+    <script src="code/about.ts"></script>
+</body>
+
+</html>
