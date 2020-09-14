@@ -1,8 +1,9 @@
 import { ContextoGeral } from "./contextoGeral";
 import * as Chartist from "./chartist"
+import { GerenciadorCores, PaletasCores } from "./cores";
 
 class Legenda {
-    constructor(readonly texto: string, readonly ignorar: boolean) {}
+    constructor(readonly texto: string, readonly ignorar: boolean, readonly cor: number[]) {}
     public toString = () : string => this.ignorar ? '' : this.texto;
 }
 
@@ -29,8 +30,8 @@ class Grafico {
     private PersonalizarBarras(data) {
         if(data.type === 'bar') {
             const legenda = data.axisX.ticks[data.index] as Legenda;
-            // const cor = legenda.cor;
-            data.element._node.style.stroke = "#5562eb"//`rgb(${cor[0]}, ${cor[1]}, ${cor[2]}, 1)`;
+            const cor = legenda.cor;
+            data.element._node.style.stroke = `rgb(${cor[0]}, ${cor[1]}, ${cor[2]}, 1)`; //"#5562eb"
             const valor = data.series[data.index];
             const index = 't' + data.index.toString();
             data.element._node.onmouseenter = (e: MouseEvent) => ExibirInfo(index, `${valor.toFixed(2)} mm<br>${legenda.texto}`, e);
@@ -79,17 +80,25 @@ if (contexto.idEstacaoPronta) {
 
     const legendas = contexto.legendas.map(v => new Date(v))
     const graficoHoras = new Grafico('#grafHoras')
+    const niveis = new GerenciadorCores(PaletasCores.agressivo).cores.reverse()
+    const valoresHora = [60,30,20,0]
     graficoHoras.Atualizar(legendas.map(
         (data,i,a) => new Legenda(
             `${Format(data.getHours())}h\n${DataString(data)}`,
-            i % 3 != 0 || i === a.length - 1)), contexto.valores)
+            i % 3 != 0 || i === a.length - 1,
+            niveis.find((v1,i1) => contexto.valores[i] >= valoresHora[i1]))), contexto.valores)
 
     const graficosDias = new Grafico('#grafDias')
     const legendasHoras = legendas.map(v => DataString(v));
     const legendasDias = legendasHoras.filter((v,i,a) => i === a.indexOf(v));
+    const valoresDia = legendasDias.map(dia => contexto.valores.filter((v,i) => legendasHoras[i] === dia).reduce((o,c) => o + c, 0))
+    const referenciaDia = [100,50,20,0]
     graficosDias.Atualizar(
-        legendasDias.map((v,i,a) => new Legenda(v, i % 2 != 0 || i === a.length - 1)),
-        legendasDias.map(dia => contexto.valores.filter((v,i) => legendasHoras[i] === dia).reduce((o,c) => o + c, 0)))
+        legendasDias.map((v,i,a) => new Legenda(
+            v,
+            i % 2 != 0 || i === a.length - 1,
+            niveis.find((v1,i1) => valoresDia[i] >= referenciaDia[i1]))),
+            valoresDia)
 
     document.getElementById('containerHoras').scrollLeft = 999999
 } else {
@@ -101,4 +110,11 @@ salvar.onclick = () => {
     document.body.className = 'fade-out'
     setTimeout(() => location.href = 'graphSettings.html', 2500)
 }
+
+const ctrMapa = document.getElementById('ctrMapa') as HTMLButtonElement
+ctrMapa.onclick = () => {
+    document.body.className = 'fade-out'
+    setTimeout(() => location.href = '.', 2500)
+}
+
 setTimeout(() => document.body.className = 'fade-in', 1000)

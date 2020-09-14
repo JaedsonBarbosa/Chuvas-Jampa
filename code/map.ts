@@ -96,8 +96,38 @@ if (contexto.mapaPronto) {
         return container;
     };
 
-    ctrConfig.addTo(mapa);
-    ctrFonte.addTo(mapa);
+    const ctrGrafico = L.control({ position: 'topleft' })
+    ctrGrafico.onAdd = function () {
+        const container = document.createElement('div')
+        container.title = 'Gráficos'
+        container.onclick = () => {
+            document.body.classList.remove('fade-in')
+            document.body.classList.add('fade-out')
+            setTimeout(() => location.href = 'graphSettings.html', 2500)
+        }
+        container.className = 'leaflet-control-layers leaflet-control icon';
+        container.innerHTML = '\uE9D2';
+        return container
+    }
+
+    const ctrAtualizar = L.control({ position: 'topleft' })
+    ctrAtualizar.onAdd = function () {
+        const container = document.createElement('div')
+        container.title = 'Atualizar'
+        container.onclick = () => {
+            document.body.classList.remove('fade-in')
+            document.body.classList.add('fade-out')
+            setTimeout(() => location.href = '.?diretoMapa', 2500)
+        }
+        container.className = 'leaflet-control-layers leaflet-control icon';
+        container.innerHTML = '\uE72C';
+        return container
+    }
+
+    ctrAtualizar.addTo(mapa)
+    ctrConfig.addTo(mapa)
+    ctrGrafico.addTo(mapa)
+    ctrFonte.addTo(mapa)
 
     const imagem = contexto.imagemChuvas;
 
@@ -108,12 +138,25 @@ if (contexto.mapaPronto) {
     const marcadores = L.layerGroup()
     for (const pluv of contexto.estacoes.filter(v => v.codibge === 2507507)) {
         const infoCompleta = `
-    <h2>${pluv.nomeestacao}</h1>
-    Fonte: <span>${pluv.siglaRede}</span><br>
-    ${pluv.ultimovalor === undefined ? '' : `Última medição:<br>${pluv.ultimovalor?.toFixed(2)} mm (${pluv.datahoraUltimovalor ?? 'Desconhecido'})<br>`}
-    Precipitação acumulada:<br>${GetMedicao(pluv, contexto.escalaTempo).toFixed(2)} mm (${contexto.escalaTempo === 1 ? 'Última hora' : `Últimas ${contexto.escalaTempo} horas`})
-    <br><a href="detalhes">Ver informações detalhadas</a>`; //target="_blank"
-        const caixa = L.popup().setContent(infoCompleta)
+        <h2>${pluv.nomeestacao}</h1>
+        Fonte: <span>${pluv.siglaRede}</span><br>
+        ${pluv.ultimovalor === undefined ? '' : `Última medição:<br>${pluv.ultimovalor?.toFixed(2)} mm (${pluv.datahoraUltimovalor ?? 'Desconhecido'})<br>`}
+        Precipitação acumulada:<br>${GetMedicao(pluv, contexto.escalaTempo).toFixed(2)} mm (${contexto.escalaTempo === 1 ? 'Última hora' : `Últimas ${contexto.escalaTempo} horas`})
+        <br>`;
+        const content = document.createElement('div')
+        content.innerHTML = infoCompleta
+        const botao = document.createElement('a')
+        botao.href = '#'
+        botao.innerText = 'Ver informações detalhadas'
+        botao.onclick = () => {
+            document.body.classList.remove('fade-in')
+            document.body.classList.add('fade-out')
+            setTimeout(() => location.href = `.?idEstacao=${pluv.idestacao}`, 2500)
+        }
+        content.appendChild(botao)
+        //<a href=".?idEstacao=${pluv.idestacao}">Ver informações detalhadas</a>
+        const caixa = L.popup()
+        caixa.setContent(content)
         marcadores.addLayer(L.marker([pluv._latitude, pluv._longitude]).bindPopup(caixa));
     }
     marcadores.addTo(mapa)

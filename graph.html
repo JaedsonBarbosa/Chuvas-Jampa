@@ -35,6 +35,10 @@
     body { transition: 2s; opacity: 0;}
     .fade-in { opacity: 1; }
     .fade-out { opacity: 0; }
+
+    #legenda div {
+        padding: 0.5rem
+    }
 </style>
 
 <body style="text-align: center;">
@@ -45,7 +49,15 @@
     </div>
     <h2>Chuva por dia (mm)</h2>
     <div id="grafDias" style="width: 100%; height: 300px;"></div>
+    <h2>Legenda</h2>
+    <div id="legenda" style="display: block;">
+        <div style="background: rgb(0, 255, 0, 0.7)">Nada previsto<br>até 20 mm de chuva</div>
+        <div style="background: rgb(255, 255, 0, 0.7)">Perigo potencial<br>até 30 mm por hora ou 50 mm por dia</div>
+        <div style="background: rgb(255, 102, 0, 0.7)">Perigo<br>até 60 mm por hora ou 100 mm por dia</div>
+        <div style="background: rgb(255, 0, 0, 0.7)">Grande perigo<br>acima de 60 mm por hora ou 100 mm por dia</div>
+    </div>
     <button class="botao" id="ctrOutra">escolher outra estação</button>
+    <button class="botao" id="ctrMapa">voltar para o início</button>
     <script src="code/graph.ts"></script>
 </body>
  

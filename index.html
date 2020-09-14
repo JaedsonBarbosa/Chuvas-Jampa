@@ -26,22 +26,14 @@
     }
 
     body { transition: 2s; }
+    .fade-in { transition: 2s; opacity: 1; }
     .fade-out { opacity: 0; }
 </style>
-
-<!--
-    PRÓXIMA META AGORA É INSERIR TRANSIÇÕES
-    https://www.tutoriart.com.br/como-criar-transicao-fade-com-css-no-carregamento-da-pagina-e-imagens/
-    E USAR NAVEGAÇÃO PELO CÓDIGO, PARA QUE SEJA POSSÍVEL USAR AS TRANSIÇÕES
-    https://github.com/quasicomputational/parcel-plugin-import-as-url
-    DEPOIS DISSO VAMOS PRA OTIMIZAÇÃO E CORREÇÕES, MAS SEM MEXER NO SERVIDOR
-    SÓ PRA LEMBRAR, OS GRÁFICOS SERÃO COLORIDOS, A LEGENDA VAI FICAR NO FINAL, BEM DETALHADA 
--->
 
 <body>
     <script src="code/loadLottie.ts"></script>
     <lottie-player id="ctrAnimacao" src="https://assets3.lottiefiles.com/packages/lf20_x9pEKm.json" background="transparent" speed="1" style="width: 200px; height: 200px; align-self: center;"></lottie-player>
-    <div id="ctrSucesso" style="display: none;">
+    <div id="ctrSucesso" class="fade-out" style="display: none;">
         <h1>CHUVAS JAMPA</h1>
         <button class="botao" id="ctrMapa">Ver mapa</button>
         <button class="botao" id="ctrGraficos">Ver gráficos</button>
@@ -55,7 +47,6 @@
         <a href="mapSettings.html">Configurações do mapa [Ignorar]</a>
         <a href="about.html">Sobre o projeto</a>
     </div>
-    <span style="visibility:hidden;" id="ultimaAtualizacao"></span>
     <script src="code/index.ts"></script>
 </body>
 

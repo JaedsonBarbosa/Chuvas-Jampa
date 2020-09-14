@@ -16,6 +16,7 @@ var erro = false;
     let ignore = false;
     player.addEventListener("complete", (x: Event) => {
         if (ignore) return
+        else player.seek(0)
         if (concluido) {
             player.remove()
             if (params.has('diretoEscolhaEstacao')) {
@@ -27,13 +28,13 @@ var erro = false;
             } else {
                 const ctrSucesso = document.getElementById('ctrSucesso')
                 ctrSucesso.style.display = 'block'
+                setTimeout(() => ctrSucesso.className = 'fade-in', 500)
             }
         } else if (erro) {
             ignore = true
             player.addEventListener('load', () => player.play())
             player.load('https://assets4.lottiefiles.com/packages/lf20_KWZHHd.json')
         } else {
-            player.seek(0)
             player.play()
         }
     })
@@ -52,10 +53,7 @@ var erro = false;
             acumulados: (number | null)[][];
             readonly data: number;
         }
-
-        const ultAtt = document.getElementById('ultimaAtualizacao');
-        ultAtt.style.visibility = 'visible'
-        ultAtt.innerHTML = new Date(dadosCarregados.data).toLocaleString()
+        console.info('Dados obtidos em: ' + new Date(dadosCarregados.data).toLocaleString())
 
         function CorrigirData(dia: string, hora: string) {
             const partesDia = dia.split('/');
@@ -111,10 +109,7 @@ var erro = false;
             readonly estacoes: IEstacaoDetalhada[];
             readonly data: number;
         };
-
-        const ultAtt = document.getElementById('ultimaAtualizacao');
-        ultAtt.style.visibility = 'visible'
-        ultAtt.innerHTML = new Date(registros.data).toLocaleString()
+        console.info('Dados obtidos em: ' + new Date(registros.data).toLocaleString())
 
         contexto.estacoes = registros.estacoes
         const dadosGeograficos = new DadosGeograficos(0.2);
@@ -123,7 +118,7 @@ var erro = false;
         canvas.height = dadosGeograficos.altura;
         const canvasContext = canvas.getContext("2d");
         const imageData = canvasContext.createImageData(dadosGeograficos.largura, dadosGeograficos.altura);
-        const niveis = new GerenciadorCores(registros.estacoes.map(v => GetMedicao(v, contexto.escalaTempo)), cor);
+        const niveis = new GerenciadorCores(cor, registros.estacoes.map(v => GetMedicao(v, contexto.escalaTempo)));
         const quantNiveis = niveis.cores.length
         const passo = (niveis.valorMaximo - niveis.valorMinimo) / (quantNiveis - 1)
         let iPonto = 0
@@ -155,7 +150,7 @@ var erro = false;
         contexto.cores = niveis
         contexto.mapaPronto = true
     }
-})().then(() => setTimeout(() => concluido = true, 1000)).catch(() => erro = true)
+})().then(() => concluido = true).catch(() => erro = true)
 
 const ctrMapa = document.getElementById('ctrMapa') as HTMLButtonElement
 ctrMapa.onclick = () => {
