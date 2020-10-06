@@ -41,39 +41,61 @@ var erro = false;
     player.play()
 
     if (idEstacao && contexto.mapaPronto) {
-        const resp = await fetch(`https://us-central1-chuvasjampa.cloudfunctions.net/obterAcumuladoHora?idEstacao=${idEstacao}&horas=340`);
-        if (resp.status !== 200) {
-            erro = true
-            return
-        }
-        const corpo = await resp.json();
-        const dadosCarregados = corpo as {
-            horarios: string[];
-            datas: string[];
-            acumulados: (number | null)[][];
-            readonly data: number;
-        }
-        console.info('Dados obtidos em: ' + new Date(dadosCarregados.data).toLocaleString())
+        if (idEstacao.length === 4) {
+            const resp = await fetch(`https://us-central1-chuvasjampa.cloudfunctions.net/obterAcumuladoHora?idEstacao=${idEstacao}&horas=340`);
+            if (resp.status !== 200) {
+                erro = true
+                return
+            }
+            const corpo = await resp.json();
+            const dadosCarregados = corpo as {
+                horarios: string[];
+                datas: string[];
+                acumulados: (number | null)[][];
+                readonly data: number;
+            }
+            console.info('Dados obtidos em: ' + new Date(dadosCarregados.data).toLocaleString())
 
-        function CorrigirData(dia: string, hora: string) {
-            const partesDia = dia.split('/');
-            const horaNum = Number(hora.replace('h', ''));
-            const data = new Date(Number(partesDia[2]), Number(partesDia[1]) - 1, Number(partesDia[0]), horaNum);
-            data.setHours(data.getHours() - 3);
-            return data;
+            function CorrigirData(dia: string, hora: string) {
+                const partesDia = dia.split('/');
+                const horaNum = Number(hora.replace('h', ''));
+                const data = new Date(Number(partesDia[2]), Number(partesDia[1]) - 1, Number(partesDia[0]), horaNum);
+                data.setHours(data.getHours() - 3);
+                return data;
+            }
+            let indexData = 0;
+            const valores: number[] = [];
+            const legendas = dadosCarregados.horarios.map((v, i) => {
+                const retorno = CorrigirData(dadosCarregados.datas[indexData], v)
+                const valor = dadosCarregados.acumulados[indexData][i] ?? 0;
+                valores.push(Number.isNaN(valor) ? 0 : valor);
+                if (v === '23h') { indexData++; }
+                return retorno.valueOf();
+            });
+            contexto.valores = valores
+            contexto.legendas = legendas
+            contexto.idEstacaoPronta = idEstacao
+        } else {
+            const resp = await fetch(`https://us-central1-chuvasjampa.cloudfunctions.net/obterRegistrosProprios?idEstacao=${idEstacao}`);
+            if (resp.status !== 200) {
+                erro = true
+                return
+            }
+            const corpo = await resp.json();
+            const tempos = (corpo.registros as number[]).map(v => new Date(v));
+            const agora = new Date().setMinutes(0, 0, 0);
+            const millisPorHora = 3600 * 1000; // Quantidade de milisegundos em uma hora
+            const valores: number[] = []
+            const legendas: number[] = []
+            for (let hora = agora - 340 * millisPorHora; hora <= agora; hora += millisPorHora) {
+                legendas.push(hora);
+                const quant = tempos.filter(v => v.valueOf() > hora && v.valueOf() - hora < millisPorHora).length;
+                valores.push(quant * 0.2);
+            }
+            contexto.valores = valores
+            contexto.legendas = legendas
+            contexto.idEstacaoPronta = idEstacao
         }
-        let indexData = 0;
-        const valores: number[] = [];
-        const legendas = dadosCarregados.horarios.map((v, i) => {
-            const retorno = CorrigirData(dadosCarregados.datas[indexData], v)
-            const valor = dadosCarregados.acumulados[indexData][i] ?? 0;
-            valores.push(Number.isNaN(valor) ? 0 : valor);
-            if (v === '23h') { indexData++; }
-            return retorno.valueOf();
-        });
-        contexto.valores = valores
-        contexto.legendas = legendas
-        contexto.idEstacaoPronta = idEstacao
     } else {
         // Analisamos se há novas configurações
         let tempo: number
@@ -108,14 +130,57 @@ var erro = false;
         };
         console.info('Dados obtidos em: ' + new Date(registros.data).toLocaleString())
 
-        contexto.estacoes = registros.estacoes
+        const estacoes = registros.estacoes;
+
+        const proprias = await fetch("https://us-central1-chuvasjampa.cloudfunctions.net/GetEstacoesProprias");
+        if (proprias.status !== 200)
+        {
+            erro = true
+            return
+        }
+        const estacoesProprias = await proprias.json() as {
+            Ativa: boolean
+            CodIBGE: number
+            Homologacao: boolean
+            Local: {_latitude: number, _longitude: number}
+            Nome: string
+            id: string
+        }[];
+        for (let i = 0; i < estacoesProprias.length; i++) {
+            const cur = estacoesProprias[i];
+            if (cur.Homologacao) continue;
+            const regs = await fetch(`https://us-central1-chuvasjampa.cloudfunctions.net/obterRegistrosProprios?idEstacao=${cur.id}`);
+            if (regs.status === 200) {
+                const corpo = await regs.json();
+                const tempos = (corpo.registros as number[]).map(v => new Date(v));
+                const agora = new Date().setMinutes(0, 0, 0);
+                const millisPorHora = 3600 * 1000;
+                estacoes.push({
+                    _latitude: cur.Local._latitude,
+                    _longitude: cur.Local._longitude,
+                    codibge: cur.CodIBGE,
+                    datahoraUltimovalor: null,
+                    idestacao: cur.id,
+                    nomeestacao: cur.Nome,
+                    siglaRede: "UFPB",
+                    ultimovalor: null,
+                    acc1hr: tempos.filter(v => v.valueOf() >= agora - millisPorHora).length * 0.2,
+                    acc3hr: tempos.filter(v => v.valueOf() >= agora - 3 * millisPorHora).length * 0.2,
+                    acc12hr: tempos.filter(v => v.valueOf() >= agora - 12 * millisPorHora).length * 0.2,
+                    acc24hr: tempos.filter(v => v.valueOf() >= agora - 24 * millisPorHora).length * 0.2
+                } as IEstacaoDetalhada);
+            }
+        }
+        
+
+        contexto.estacoes = estacoes;
         const dadosGeograficos = new DadosGeograficos(0.2);
         const canvas = document.createElement("canvas");
         canvas.width = dadosGeograficos.largura;
         canvas.height = dadosGeograficos.altura;
         const canvasContext = canvas.getContext("2d");
         const imageData = canvasContext.createImageData(dadosGeograficos.largura, dadosGeograficos.altura);
-        const niveis = new GerenciadorCores(cor, registros.estacoes.map(v => GetMedicao(v, contexto.escalaTempo)));
+        const niveis = new GerenciadorCores(cor, estacoes.map(v => GetMedicao(v, contexto.escalaTempo)));
         const quantNiveis = niveis.cores.length
         const passo = (niveis.valorMaximo - niveis.valorMinimo) / (quantNiveis - 1)
         let iPonto = 0
