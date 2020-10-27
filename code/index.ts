@@ -42,7 +42,7 @@ var erro = false;
 
     if (idEstacao && contexto.mapaPronto) {
         if (idEstacao.length === 4) {
-            const resp = await fetch(`https://us-central1-chuvasjampa.cloudfunctions.net/obterAcumuladoHora?idEstacao=${idEstacao}&horas=340`);
+            const resp = await fetch(`https://5nyyeipxml.execute-api.us-east-1.amazonaws.com/producao/helloWorld?metodo=obterAcumuladoHora&idEstacao=${idEstacao}&horas=340`);
             if (resp.status !== 200) {
                 erro = true
                 return
@@ -76,7 +76,7 @@ var erro = false;
             contexto.legendas = legendas
             contexto.idEstacaoPronta = idEstacao
         } else {
-            const resp = await fetch(`https://us-central1-chuvasjampa.cloudfunctions.net/obterRegistrosProprios?idEstacao=${idEstacao}`);
+            const resp = await fetch(`https://5nyyeipxml.execute-api.us-east-1.amazonaws.com/producao/helloWorld?metodo=obterRegistrosProprios&idEstacao=${idEstacao}`);
             if (resp.status !== 200) {
                 erro = true
                 return
@@ -118,7 +118,7 @@ var erro = false;
         }
 
         // Fazemos a requisição e processamos
-        const resp = await fetch("https://us-central1-chuvasjampa.cloudfunctions.net/obterRegistros");
+        const resp = await fetch("https://5nyyeipxml.execute-api.us-east-1.amazonaws.com/producao/helloWorld?metodo=obterRegistros");
         if (resp.status !== 200) {
             erro = true
             return
@@ -132,7 +132,7 @@ var erro = false;
 
         const estacoes = registros.estacoes;
 
-        const proprias = await fetch("https://us-central1-chuvasjampa.cloudfunctions.net/GetEstacoesProprias");
+        const proprias = await fetch("https://5nyyeipxml.execute-api.us-east-1.amazonaws.com/producao/helloWorld?metodo=GetEstacoesProprias");
         if (proprias.status !== 200)
         {
             erro = true
@@ -149,7 +149,7 @@ var erro = false;
         for (let i = 0; i < estacoesProprias.length; i++) {
             const cur = estacoesProprias[i];
             if (cur.Homologacao) continue;
-            const regs = await fetch(`https://us-central1-chuvasjampa.cloudfunctions.net/obterRegistrosProprios?idEstacao=${cur.id}`);
+            const regs = await fetch(`https://5nyyeipxml.execute-api.us-east-1.amazonaws.com/producao/helloWorld?metodo=obterRegistrosProprios&idEstacao=${cur.id}`);
             if (regs.status === 200) {
                 const corpo = await regs.json();
                 const tempos = (corpo.registros as number[]).map(v => new Date(v));
