@@ -35,21 +35,19 @@ if (contexto.mapaPronto) {
     );
     mapa.on('mouseout', () => lastPopup?.remove());
 
-    const atribuicao = 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-
     //Adicionar base  normal
-    const fonteDetalhada = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
         subdomains: 'abcd',
         minZoom: 0,
         maxZoom: 18,
         detectRetina: true
-    });
-    fonteDetalhada.addTo(mapa)
+    }).addTo(mapa);
 
+    /* Só um mapa padrão já está bom
     // Adicionar base simplificada
     const fonteSimplificada = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/toner-lite/{z}/{x}/{y}{r}.{ext}', {
-        attribution: atribuicao,
+        attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
         subdomains: 'abcd',
         minZoom: 0,
         maxZoom: 18,
@@ -79,7 +77,7 @@ if (contexto.mapaPronto) {
         container.innerHTML = desligar;
         container.title = 'Usar mapa simplificado'
         return container;
-    };
+    };*/
 
     const ctrConfig = L.control({ position: 'topleft' });
     ctrConfig.onAdd = function () {
@@ -126,7 +124,7 @@ if (contexto.mapaPronto) {
     ctrAtualizar.addTo(mapa)
     ctrConfig.addTo(mapa)
     ctrGrafico.addTo(mapa)
-    ctrFonte.addTo(mapa)
+    //ctrFonte.addTo(mapa)
 
     const imagem = contexto.imagemChuvas;
 
@@ -160,6 +158,7 @@ if (contexto.mapaPronto) {
     }
     marcadores.addTo(mapa)
 
+    /* Quase ninguém vai querer tirar os marcadores
     const ctrMarcadores = L.control({ position: 'topleft' });
     ctrMarcadores.onAdd = function () {
         const container = document.createElement("div");
@@ -181,7 +180,7 @@ if (contexto.mapaPronto) {
         container.title = 'Não mostrar as estações'
         return container;
     };
-    ctrMarcadores.addTo(mapa)
+    ctrMarcadores.addTo(mapa)*/
 
     // Atualizar barra de cores
     const nivelMinimo = contexto.cores.valorMinimo;
