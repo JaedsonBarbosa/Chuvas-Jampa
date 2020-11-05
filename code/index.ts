@@ -145,6 +145,7 @@ var erro = false;
             Local: {_latitude: number, _longitude: number}
             Nome: string
             id: string
+            ultimaConexao: number
         }[];
         for (let i = 0; i < estacoesProprias.length; i++) {
             const cur = estacoesProprias[i];
@@ -152,7 +153,8 @@ var erro = false;
             const regs = await fetch(`https://5nyyeipxml.execute-api.us-east-1.amazonaws.com/producao/helloWorld?metodo=obterRegistrosProprios&idEstacao=${cur.id}`);
             if (regs.status === 200) {
                 const corpo = await regs.json();
-                const tempos = (corpo.registros as number[]).map(v => new Date(v));
+                var ts = corpo.registros as number[];
+                const tempos = ts.map(v => new Date(v));
                 const agora = new Date().setMinutes(0, 0, 0);
                 const millisPorHora = 3600 * 1000;
                 estacoes.push({
@@ -164,6 +166,7 @@ var erro = false;
                     nomeestacao: cur.Nome,
                     siglaRede: "UFPB",
                     ultimovalor: null,
+                    ultimaConexao: Math.max(...ts, cur.ultimaConexao * 1000),
                     acc1hr: tempos.filter(v => v.valueOf() >= agora - millisPorHora).length * 0.2,
                     acc3hr: tempos.filter(v => v.valueOf() >= agora - 3 * millisPorHora).length * 0.2,
                     acc12hr: tempos.filter(v => v.valueOf() >= agora - 12 * millisPorHora).length * 0.2,
@@ -171,7 +174,6 @@ var erro = false;
                 } as IEstacaoDetalhada);
             }
         }
-        
 
         contexto.estacoes = estacoes;
         const dadosGeograficos = new DadosGeograficos(0.2);
