@@ -47,6 +47,7 @@ export interface IEstacaoDetalhada {
     _latitude: number;
     _longitude: number;
     siglaRede: string;
+    ultimaConexao: number;
 }
 
 export function GetMedicao(estacao: IEstacaoDetalhada, horas: number): number {

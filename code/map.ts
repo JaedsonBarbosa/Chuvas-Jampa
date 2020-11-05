@@ -134,10 +134,11 @@ if (contexto.mapaPronto) {
     // Atualizar marcadores
     const marcadores = L.layerGroup()
     for (const pluv of contexto.estacoes.filter(v => v.codibge === 2507507)) {
+        console.log(pluv);
         const infoCompleta = `
         <h2>${pluv.nomeestacao}</h1>
         Fonte: <span>${pluv.siglaRede}</span><br>
-        ${pluv.ultimovalor === undefined ? '' : `Última medição:<br>${pluv.ultimovalor?.toFixed(2)} mm (${pluv.datahoraUltimovalor ?? 'Desconhecido'})<br>`}
+        ${pluv.ultimovalor ? `Última medição:<br>${pluv.ultimovalor?.toFixed(2)} mm (${pluv.datahoraUltimovalor ?? 'Desconhecido'})<br>` : pluv.ultimaConexao ? `Última conexão:<br>${new Date(pluv.ultimaConexao).toLocaleString()}<br>` : ''}
         Precipitação acumulada:<br>${GetMedicao(pluv, contexto.escalaTempo).toFixed(2)} mm (${contexto.escalaTempo === 1 ? 'Última hora' : `Últimas ${contexto.escalaTempo} horas`})
         <br>`;
         const content = document.createElement('div')
